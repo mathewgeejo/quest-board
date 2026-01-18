@@ -44,8 +44,9 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'Quest tree is required' }, { status: 400 })
     }
     
-    // Generate slug from name
-    const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    // Generate slug from name with timestamp to ensure uniqueness
+    const baseSlug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
+    const slug = `${baseSlug}-${Date.now()}`
     
     const quest = await prisma.quest.create({
       data: {
@@ -63,8 +64,11 @@ export async function POST(request: Request) {
     })
     
     return NextResponse.json(quest, { status: 201 })
-  } catch (error) {
+  } catch (error: any) {
     console.error('Failed to create quest:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json(
+      { error: error.message || 'Failed to create quest' },
+      { status: 500 }
+    )
   }
 }
