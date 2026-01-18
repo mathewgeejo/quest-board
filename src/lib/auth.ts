@@ -103,15 +103,12 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id
         
-        // Check if user just signed in with OAuth
-        if (account?.provider === 'google' || account?.provider === 'github') {
-          // Fetch the user to check onboarding status
-          const dbUser = await prisma.user.findUnique({
-            where: { id: user.id },
-            select: { onboardingComplete: true },
-          })
-          token.onboardingComplete = dbUser?.onboardingComplete || false
-        }
+        // Always fetch the user's onboarding status when signing in
+        const dbUser = await prisma.user.findUnique({
+          where: { id: user.id },
+          select: { onboardingComplete: true },
+        })
+        token.onboardingComplete = dbUser?.onboardingComplete || false
       }
       
       // Handle session updates

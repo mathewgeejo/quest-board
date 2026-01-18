@@ -171,7 +171,7 @@ export default function OnboardingPage() {
       }
       
       toast.success('Setup complete! Let the adventure begin!')
-      await updateSession()
+      await updateSession({ onboardingComplete: true })
       router.push('/dashboard')
     } catch (error) {
       toast.error('Something went wrong. Please try again.')
