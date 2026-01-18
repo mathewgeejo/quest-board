@@ -90,7 +90,7 @@ interface XPProgressCardProps {
 
 export function XPProgressCard({ totalXP, className }: XPProgressCardProps) {
   const level = calculateLevel(totalXP)
-  const { current, required, percent } = getXPProgress(totalXP)
+  const { current, required, percentage } = getXPProgress(totalXP)
   
   return (
     <Card className={className}>

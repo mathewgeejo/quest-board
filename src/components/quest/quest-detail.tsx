@@ -36,7 +36,7 @@ interface QuestDetailProps {
     id: string
     name: string
     description: string
-    difficulty: 'TUTORIAL' | 'EASY' | 'MEDIUM' | 'HARD' | 'EPIC' | 'LEGENDARY'
+    difficulty: 'NOVICE' | 'APPRENTICE' | 'JOURNEYMAN' | 'EXPERT' | 'MASTER'
     xpReward: number
     estimatedMinutes: number
     deadlineDays: number

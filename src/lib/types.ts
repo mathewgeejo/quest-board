@@ -188,7 +188,7 @@ export interface DashboardStats {
 }
 
 export interface QuestWithProgress extends Quest {
-  userProgress: UserQuestProgress | null
+  userProgress: UserQuestProgress | undefined
   isAvailable: boolean
   prerequisitesMet: boolean
 }
