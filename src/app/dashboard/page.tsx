@@ -16,6 +16,7 @@ import { QuestCard } from '@/components/quest'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { DynamicIcon } from '@/lib/icons'
 import Link from 'next/link'
 import { ArrowRight, Sparkles } from 'lucide-react'
 
@@ -180,7 +181,10 @@ export default function DashboardPage() {
                         key={userBadge.id}
                         className="flex items-center gap-3 p-2 rounded-lg hover:bg-secondary/50 transition-colors"
                       >
-                        <span className="text-2xl">{userBadge.badge.icon}</span>
+                        <DynamicIcon 
+                          name={userBadge.badge.icon} 
+                          className="h-6 w-6 text-yellow-500"
+                        />
                         <div className="flex-1 min-w-0">
                           <p className="font-medium truncate">{userBadge.badge.name}</p>
                           <p className="text-xs text-muted-foreground">

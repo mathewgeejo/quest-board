@@ -49,12 +49,11 @@ export default function QuestsPage() {
   
   const difficulties = [
     { value: null, label: 'All Difficulties' },
-    { value: 'TUTORIAL', label: '📖 Tutorial' },
-    { value: 'EASY', label: '⭐ Easy' },
-    { value: 'MEDIUM', label: '⭐⭐ Medium' },
-    { value: 'HARD', label: '⭐⭐⭐ Hard' },
-    { value: 'EPIC', label: '🔥 Epic' },
-    { value: 'LEGENDARY', label: '👑 Legendary' },
+    { value: 'NOVICE', label: 'Novice' },
+    { value: 'APPRENTICE', label: 'Apprentice' },
+    { value: 'JOURNEYMAN', label: 'Journeyman' },
+    { value: 'EXPERT', label: 'Expert' },
+    { value: 'MASTER', label: 'Master' },
   ]
   
   const statuses = [

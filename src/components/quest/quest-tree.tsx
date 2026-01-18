@@ -3,6 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
+import { DynamicIcon } from '@/lib/icons'
 import Link from 'next/link'
 import { ChevronRight, Lock, CheckCircle } from 'lucide-react'
 
@@ -50,10 +51,14 @@ export function QuestTreeCard({ tree, className }: QuestTreeCardProps) {
         <CardContent className="p-6">
           <div className="flex items-start gap-4">
             <div
-              className="h-14 w-14 rounded-xl flex items-center justify-center text-3xl shrink-0"
+              className="h-14 w-14 rounded-xl flex items-center justify-center shrink-0"
               style={{ backgroundColor: tree.color + '20' }}
             >
-              {tree.icon}
+              <DynamicIcon 
+                name={tree.icon} 
+                className="h-7 w-7"
+                style={{ color: tree.color }}
+              />
             </div>
             
             <div className="flex-1 min-w-0">
@@ -116,10 +121,10 @@ export function QuestTreeGrid({ trees, className }: QuestTreeGridProps) {
   
   const layerOrder = ['FOUNDATIONS', 'TOOL_MASTERY', 'SPECIALIZATION', 'CAPSTONE']
   const layerLabels: Record<string, string> = {
-    FOUNDATIONS: '🏗️ Foundations',
-    TOOL_MASTERY: '🛠️ Tool Mastery',
-    SPECIALIZATION: '🎯 Specialization',
-    CAPSTONE: '🏆 Capstone Projects',
+    FOUNDATIONS: 'Foundations',
+    TOOL_MASTERY: 'Tool Mastery',
+    SPECIALIZATION: 'Specialization',
+    CAPSTONE: 'Capstone Projects',
   }
   
   return (

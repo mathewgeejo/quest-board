@@ -9,6 +9,7 @@ import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import { LeaderboardRowSkeleton } from '@/components/ui/skeleton'
 import { cn, getRolePathInfo } from '@/lib/utils'
+import { DynamicIcon } from '@/lib/icons'
 import { Trophy, Medal, Star, Crown } from 'lucide-react'
 
 interface LeaderboardEntry {
@@ -231,7 +232,11 @@ export default function LeaderboardPage() {
                             )}
                           </p>
                           {entry.rank <= 3 && (
-                            <span className="text-lg">{roleInfo.icon}</span>
+                            <DynamicIcon 
+                              name={roleInfo.icon} 
+                              className="h-5 w-5"
+                              style={{ color: roleInfo.color }}
+                            />
                           )}
                         </div>
                         <div className="flex items-center gap-3 text-sm text-muted-foreground">

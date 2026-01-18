@@ -4,7 +4,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { DifficultyBadge } from '@/components/ui/badge'
 import { cn, formatTimeRemaining } from '@/lib/utils'
-import { Clock, CheckCircle, Lock, Star, ArrowRight } from 'lucide-react'
+import { DynamicIcon } from '@/lib/icons'
+import { Clock, CheckCircle, Lock, Star, ArrowRight, FileText } from 'lucide-react'
 import Link from 'next/link'
 
 interface QuestTask {
@@ -17,7 +18,7 @@ interface Quest {
   id: string
   name: string
   description: string
-  difficulty: 'TUTORIAL' | 'EASY' | 'MEDIUM' | 'HARD' | 'EPIC' | 'LEGENDARY'
+  difficulty: 'NOVICE' | 'APPRENTICE' | 'JOURNEYMAN' | 'EXPERT' | 'MASTER'
   xpReward: number
   estimatedMinutes: number
   tasks: QuestTask[]
@@ -74,12 +75,11 @@ export function QuestCard({ quest, showTree = true, className }: QuestCardProps)
           <div className="flex items-start justify-between mb-3">
             <div className="flex items-center gap-2">
               {showTree && quest.tree && (
-                <span
-                  className="text-2xl"
+                <DynamicIcon
+                  name={quest.tree.icon}
+                  className="h-6 w-6"
                   style={{ color: quest.tree.color }}
-                >
-                  {quest.tree.icon}
-                </span>
+                />
               )}
               <div>
                 <h3 className="font-semibold group-hover:text-primary transition-colors">
@@ -150,7 +150,7 @@ export function QuestCard({ quest, showTree = true, className }: QuestCardProps)
           {/* Badge preview */}
           {quest.badge && (
             <div className="mt-4 pt-4 border-t flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="text-lg">{quest.badge.icon}</span>
+              <DynamicIcon name={quest.badge.icon} className="h-5 w-5 text-yellow-500" />
               <span>Unlocks "{quest.badge.name}" badge</span>
             </div>
           )}
@@ -194,7 +194,11 @@ export function QuestListItem({ quest, onAccept }: QuestListItemProps) {
             className="h-10 w-10 rounded-full flex items-center justify-center"
             style={{ backgroundColor: quest.tree?.color + '20' }}
           >
-            <span className="text-xl">{quest.tree?.icon || '📜'}</span>
+            <DynamicIcon 
+              name={quest.tree?.icon || 'file-text'} 
+              className="h-5 w-5"
+              style={{ color: quest.tree?.color }}
+            />
           </div>
         )}
       </div>

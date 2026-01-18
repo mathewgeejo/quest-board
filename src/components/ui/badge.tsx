@@ -61,27 +61,33 @@ function RarityBadge({ rarity, className }: RarityBadgeProps) {
 
 // Difficulty badge for quests
 interface DifficultyBadgeProps {
-  difficulty: 'TUTORIAL' | 'EASY' | 'MEDIUM' | 'HARD' | 'EPIC' | 'LEGENDARY'
+  difficulty: 'NOVICE' | 'APPRENTICE' | 'JOURNEYMAN' | 'EXPERT' | 'MASTER'
   className?: string
 }
 
 function DifficultyBadge({ difficulty, className }: DifficultyBadgeProps) {
   const difficultyStyles = {
-    TUTORIAL: 'bg-green-500/10 text-green-600 dark:text-green-400',
-    EASY: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
-    MEDIUM: 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400',
-    HARD: 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
-    EPIC: 'bg-red-500/10 text-red-600 dark:text-red-400',
-    LEGENDARY: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
+    NOVICE: 'bg-green-500/10 text-green-600 dark:text-green-400',
+    APPRENTICE: 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400',
+    JOURNEYMAN: 'bg-yellow-500/10 text-yellow-600 dark:text-yellow-400',
+    EXPERT: 'bg-orange-500/10 text-orange-600 dark:text-orange-400',
+    MASTER: 'bg-purple-500/10 text-purple-600 dark:text-purple-400',
   }
   
-  const difficultyIcons = {
-    TUTORIAL: '📖',
-    EASY: '⭐',
-    MEDIUM: '⭐⭐',
-    HARD: '⭐⭐⭐',
-    EPIC: '🔥',
-    LEGENDARY: '👑',
+  const difficultyLabels = {
+    NOVICE: 'Novice',
+    APPRENTICE: 'Apprentice',
+    JOURNEYMAN: 'Journeyman',
+    EXPERT: 'Expert',
+    MASTER: 'Master',
+  }
+  
+  const difficultyStars = {
+    NOVICE: 1,
+    APPRENTICE: 2,
+    JOURNEYMAN: 3,
+    EXPERT: 4,
+    MASTER: 5,
   }
   
   return (
@@ -92,8 +98,12 @@ function DifficultyBadge({ difficulty, className }: DifficultyBadgeProps) {
         className
       )}
     >
-      <span>{difficultyIcons[difficulty]}</span>
-      {difficulty.charAt(0) + difficulty.slice(1).toLowerCase()}
+      <span className="flex gap-0.5">
+        {Array.from({ length: difficultyStars[difficulty] }).map((_, i) => (
+          <span key={i} className="text-yellow-500">★</span>
+        ))}
+      </span>
+      {difficultyLabels[difficulty]}
     </span>
   )
 }

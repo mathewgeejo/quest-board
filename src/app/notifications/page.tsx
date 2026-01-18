@@ -72,7 +72,12 @@ export default function NotificationsPage() {
       const res = await fetch('/api/notifications')
       if (res.ok) {
         const data = await res.json()
-        setNotifications(data)
+        // Map API response to expected format
+        const mappedNotifications = (data.notifications || []).map((n: any) => ({
+          ...n,
+          read: n.isRead || n.read, // Handle both field names
+        }))
+        setNotifications(mappedNotifications)
       }
     } catch (error) {
       console.error('Failed to fetch notifications:', error)
@@ -86,7 +91,7 @@ export default function NotificationsPage() {
       await fetch('/api/notifications', {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ notificationId: id }),
+        body: JSON.stringify({ notificationIds: [id] }),
       })
       
       setNotifications(prev =>
@@ -112,12 +117,12 @@ export default function NotificationsPage() {
     }
   }
   
-  const filteredNotifications = notifications.filter(n => {
+  const filteredNotifications = (notifications || []).filter(n => {
     if (filter === 'unread') return !n.read
     return true
   })
   
-  const unreadCount = notifications.filter(n => !n.read).length
+  const unreadCount = (notifications || []).filter(n => !n.read).length
   
   if (status === 'loading') {
     return (

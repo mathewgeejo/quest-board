@@ -10,6 +10,12 @@ import {
   ArrowRight,
   CheckCircle,
   Star,
+  Palette,
+  Server,
+  Wrench,
+  Rocket,
+  BarChart3,
+  type LucideIcon,
 } from 'lucide-react'
 
 export default function HomePage() {
@@ -172,31 +178,31 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[
               {
-                icon: '🎨',
+                Icon: Palette,
                 name: 'Frontend Developer',
                 color: '#3B82F6',
                 skills: ['HTML/CSS', 'JavaScript', 'React', 'UI/UX'],
               },
               {
-                icon: '⚙️',
+                Icon: Server,
                 name: 'Backend Developer',
                 color: '#10B981',
                 skills: ['Node.js', 'Databases', 'APIs', 'Security'],
               },
               {
-                icon: '🔧',
+                Icon: Wrench,
                 name: 'DevOps Engineer',
                 color: '#F59E0B',
                 skills: ['Linux', 'Docker', 'CI/CD', 'Cloud'],
               },
               {
-                icon: '🚀',
+                Icon: Rocket,
                 name: 'Full-Stack Developer',
                 color: '#8B5CF6',
                 skills: ['Frontend', 'Backend', 'Deployment', 'System Design'],
               },
               {
-                icon: '📊',
+                Icon: BarChart3,
                 name: 'Data Engineer',
                 color: '#EC4899',
                 skills: ['Python', 'SQL', 'Data Pipelines', 'Analytics'],
@@ -207,10 +213,10 @@ export default function HomePage() {
                 className="p-6 rounded-xl border bg-card hover:shadow-lg hover:-translate-y-1 transition-all"
               >
                 <div
-                  className="h-14 w-14 rounded-xl flex items-center justify-center text-3xl mb-4"
+                  className="h-14 w-14 rounded-xl flex items-center justify-center mb-4"
                   style={{ backgroundColor: path.color + '20' }}
                 >
-                  {path.icon}
+                  <path.Icon className="h-7 w-7" style={{ color: path.color }} />
                 </div>
                 <h3 className="text-lg font-semibold mb-3">{path.name}</h3>
                 <div className="flex flex-wrap gap-2">

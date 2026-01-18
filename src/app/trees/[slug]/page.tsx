@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { QuestCardSkeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
+import { DynamicIcon } from '@/lib/icons'
 import Link from 'next/link'
 import { ArrowLeft, CheckCircle } from 'lucide-react'
 
@@ -97,10 +98,14 @@ export default function TreeDetailPage({ params }: TreeDetailPageProps) {
           <CardContent className="p-6">
             <div className="flex flex-col md:flex-row gap-6">
               <div
-                className="h-24 w-24 rounded-2xl flex items-center justify-center text-5xl shrink-0"
+                className="h-24 w-24 rounded-2xl flex items-center justify-center shrink-0"
                 style={{ backgroundColor: tree.color + '20' }}
               >
-                {tree.icon}
+                <DynamicIcon 
+                  name={tree.icon}
+                  className="h-12 w-12"
+                  style={{ color: tree.color }}
+                />
               </div>
               
               <div className="flex-1">

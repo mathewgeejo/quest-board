@@ -12,6 +12,7 @@ import { Progress } from '@/components/ui/progress'
 import { RarityBadge } from '@/components/ui/badge'
 import { Skeleton } from '@/components/ui/skeleton'
 import { calculateLevel, getXPProgress, getRolePathInfo } from '@/lib/utils'
+import { DynamicIcon } from '@/lib/icons'
 import toast from 'react-hot-toast'
 import {
   User,
@@ -173,7 +174,7 @@ export default function ProfilePage() {
                     className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-sm font-medium"
                     style={{ backgroundColor: roleInfo.color + '20', color: roleInfo.color }}
                   >
-                    <span>{roleInfo.icon}</span>
+                    <DynamicIcon name={roleInfo.icon} className="h-4 w-4" />
                     {roleInfo.name}
                   </div>
                 </div>
@@ -329,7 +330,7 @@ export default function ProfilePage() {
             </CardTitle>
           </CardHeader>
           <CardContent>
-            {profile.badges.length === 0 ? (
+            {!profile.badges || profile.badges.length === 0 ? (
               <p className="text-center text-muted-foreground py-8">
                 Complete quests to earn badges!
               </p>
@@ -340,7 +341,10 @@ export default function ProfilePage() {
                     key={userBadge.id}
                     className="p-4 rounded-lg border bg-card text-center hover:shadow-md transition-shadow"
                   >
-                    <span className="text-4xl">{userBadge.badge.icon}</span>
+                    <DynamicIcon 
+                      name={userBadge.badge.icon} 
+                      className="h-10 w-10 mx-auto text-yellow-500"
+                    />
                     <p className="font-medium mt-2 text-sm truncate">
                       {userBadge.badge.name}
                     </p>

@@ -9,6 +9,7 @@ import { RarityBadge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Skeleton } from '@/components/ui/skeleton'
 import { cn } from '@/lib/utils'
+import { DynamicIcon } from '@/lib/icons'
 import { Trophy, Lock, CheckCircle } from 'lucide-react'
 
 interface Badge {
@@ -184,13 +185,20 @@ export default function BadgesPage() {
                   <div className="flex items-start gap-4">
                     <div
                       className={cn(
-                        'h-16 w-16 rounded-xl flex items-center justify-center text-4xl shrink-0',
+                        'h-16 w-16 rounded-xl flex items-center justify-center shrink-0',
                         badge.earned
                           ? 'bg-yellow-500/10'
                           : 'bg-muted'
                       )}
                     >
-                      {badge.earned ? badge.icon : <Lock className="h-8 w-8" />}
+                      {badge.earned ? (
+                        <DynamicIcon 
+                          name={badge.icon} 
+                          className="h-8 w-8 text-yellow-500"
+                        />
+                      ) : (
+                        <Lock className="h-8 w-8 text-muted-foreground" />
+                      )}
                     </div>
                     
                     <div className="flex-1 min-w-0">

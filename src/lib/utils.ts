@@ -111,9 +111,12 @@ export function calculateQuestXP(
 // DATE & TIME UTILITIES
 // ============================================
 
-export function formatTimeRemaining(deadline: Date): string {
+export function formatTimeRemaining(deadline: Date | string | null | undefined): string {
+  if (!deadline) return 'No deadline'
+  
   const now = new Date()
-  const diff = deadline.getTime() - now.getTime()
+  const deadlineDate = typeof deadline === 'string' ? new Date(deadline) : deadline
+  const diff = deadlineDate.getTime() - now.getTime()
   
   if (diff <= 0) return 'Expired'
   
@@ -126,9 +129,12 @@ export function formatTimeRemaining(deadline: Date): string {
   return `${minutes}m left`
 }
 
-export function isDeadlineSoon(deadline: Date, hoursThreshold: number = 24): boolean {
+export function isDeadlineSoon(deadline: Date | string | null | undefined, hoursThreshold: number = 24): boolean {
+  if (!deadline) return false
+  
   const now = new Date()
-  const diff = deadline.getTime() - now.getTime()
+  const deadlineDate = typeof deadline === 'string' ? new Date(deadline) : deadline
+  const diff = deadlineDate.getTime() - now.getTime()
   return diff > 0 && diff <= hoursThreshold * 60 * 60 * 1000
 }
 
@@ -211,28 +217,28 @@ export function getStatusColor(status: string): string {
 export function getStatusIcon(status: string): string {
   const icons: Record<string, string> = {
     NOT_STARTED: '⬜',
-    IN_PROGRESS: '🟡',
-    COMPLETED: '✅',
-    EXPIRED: '⏰',
-    ABANDONED: '🔄',
+    IN_PROGRESS: 'circle-dot',
+    COMPLETED: 'check-circle',
+    EXPIRED: 'timer',
+    ABANDONED: 'circle',
   }
-  return icons[status] || '⬜'
+  return icons[status] || 'circle'
 }
 
 // ============================================
 // ROLE PATH HELPERS
 // ============================================
 
-export function getRolePathInfo(path: string): { name: string; icon: string; color: string } {
-  const paths: Record<string, { name: string; icon: string; color: string }> = {
-    DEVOPS: { name: 'DevOps Engineer', icon: '🧰', color: 'text-orange-500' },
-    BACKEND: { name: 'Backend Engineer', icon: '⚙️', color: 'text-green-500' },
-    FRONTEND: { name: 'Frontend Engineer', icon: '🎨', color: 'text-pink-500' },
-    PRODUCT: { name: 'Product Manager', icon: '📊', color: 'text-purple-500' },
-    SECURITY: { name: 'Security Engineer', icon: '🔐', color: 'text-red-500' },
-    FULLSTACK: { name: 'Full Stack Developer', icon: '🎯', color: 'text-blue-500' },
+export function getRolePathInfo(path: string): { name: string; icon: string; color: string; description: string } {
+  const paths: Record<string, { name: string; icon: string; color: string; description: string }> = {
+    DEVOPS: { name: 'DevOps Engineer', icon: 'wrench', color: '#f97316', description: 'Infrastructure, CI/CD, and automation' },
+    BACKEND: { name: 'Backend Engineer', icon: 'server', color: '#22c55e', description: 'APIs, databases, and server logic' },
+    FRONTEND: { name: 'Frontend Engineer', icon: 'palette', color: '#ec4899', description: 'UI/UX, web apps, and user experience' },
+    PRODUCT: { name: 'Product Manager', icon: 'bar-chart', color: '#a855f7', description: 'Strategy, planning, and analytics' },
+    SECURITY: { name: 'Security Engineer', icon: 'shield', color: '#ef4444', description: 'Security, compliance, and protection' },
+    FULLSTACK: { name: 'Full Stack Developer', icon: 'rocket', color: '#3b82f6', description: 'End-to-end development' },
   }
-  return paths[path] || { name: path, icon: '📚', color: 'text-gray-500' }
+  return paths[path] || { name: path, icon: 'book', color: '#6b7280', description: 'Learning path' }
 }
 
 // ============================================

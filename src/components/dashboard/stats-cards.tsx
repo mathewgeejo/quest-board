@@ -3,6 +3,7 @@
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { cn, calculateLevel, getXPProgress, getRolePathInfo } from '@/lib/utils'
+import { DynamicIcon } from '@/lib/icons'
 import {
   Zap,
   Flame,
@@ -152,8 +153,9 @@ export function StreakCard({ currentStreak, longestStreak, className }: StreakCa
         </div>
         
         {currentStreak >= 7 && (
-          <div className="mt-4 p-3 rounded-lg bg-orange-500/10 text-orange-600 text-sm font-medium">
-            🔥 +5% XP bonus active!
+          <div className="mt-4 p-3 rounded-lg bg-orange-500/10 text-orange-600 text-sm font-medium flex items-center gap-2">
+            <Flame className="h-4 w-4" />
+            +5% XP bonus active!
           </div>
         )}
       </CardContent>
@@ -247,10 +249,14 @@ export function RolePathCard({ rolePath, className }: RolePathCardProps) {
       <CardContent className="p-6">
         <div className="flex items-center gap-4">
           <div
-            className="h-14 w-14 rounded-xl flex items-center justify-center text-3xl"
+            className="h-14 w-14 rounded-xl flex items-center justify-center"
             style={{ backgroundColor: pathInfo.color + '20' }}
           >
-            {pathInfo.icon}
+            <DynamicIcon 
+              name={pathInfo.icon} 
+              className="h-7 w-7"
+              style={{ color: pathInfo.color }}
+            />
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Role Path</p>

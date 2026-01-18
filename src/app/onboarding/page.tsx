@@ -7,7 +7,25 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { cn } from '@/lib/utils'
-import { Swords, ArrowRight, ArrowLeft, CheckCircle } from 'lucide-react'
+import {
+  Swords,
+  ArrowRight,
+  ArrowLeft,
+  CheckCircle,
+  Palette,
+  Server,
+  Wrench,
+  Rocket,
+  BarChart3,
+  Sprout,
+  Leaf,
+  TreeDeciduous,
+  Mountain,
+  Target,
+  Star,
+  Trophy,
+  type LucideIcon,
+} from 'lucide-react'
 import toast from 'react-hot-toast'
 
 const STEPS = [
@@ -33,68 +51,68 @@ const STEPS = [
   },
 ]
 
-const ROLE_PATHS = [
+const ROLE_PATHS: { value: string; Icon: LucideIcon; name: string; color: string; description: string }[] = [
   {
     value: 'FRONTEND',
-    icon: '🎨',
+    Icon: Palette,
     name: 'Frontend Developer',
     color: '#3B82F6',
     description: 'Build beautiful user interfaces with HTML, CSS, JavaScript, and React.',
   },
   {
     value: 'BACKEND',
-    icon: '⚙️',
+    Icon: Server,
     name: 'Backend Developer',
     color: '#10B981',
     description: 'Create APIs, databases, and server-side applications.',
   },
   {
     value: 'DEVOPS',
-    icon: '🔧',
+    Icon: Wrench,
     name: 'DevOps Engineer',
     color: '#F59E0B',
     description: 'Master deployment, CI/CD, and cloud infrastructure.',
   },
   {
     value: 'FULLSTACK',
-    icon: '🚀',
+    Icon: Rocket,
     name: 'Full-Stack Developer',
     color: '#8B5CF6',
     description: 'Learn both frontend and backend development.',
   },
   {
     value: 'DATA',
-    icon: '📊',
+    Icon: BarChart3,
     name: 'Data Engineer',
     color: '#EC4899',
     description: 'Work with data pipelines, analytics, and databases.',
   },
 ]
 
-const EXPERIENCE_LEVELS = [
+const EXPERIENCE_LEVELS: { value: string; title: string; description: string; Icon: LucideIcon }[] = [
   {
     value: 'BEGINNER',
     title: 'Complete Beginner',
     description: "I've never written code before",
-    icon: '🌱',
+    Icon: Sprout,
   },
   {
     value: 'NOVICE',
     title: 'Novice',
     description: "I've done some tutorials or courses",
-    icon: '🌿',
+    Icon: Leaf,
   },
   {
     value: 'INTERMEDIATE',
     title: 'Intermediate',
     description: "I've built some personal projects",
-    icon: '🌳',
+    Icon: TreeDeciduous,
   },
   {
     value: 'EXPERIENCED',
     title: 'Experienced',
     description: "I've worked on professional projects",
-    icon: '🏔️',
+    Icon: Mountain,
   },
 ]
 
@@ -182,15 +200,15 @@ export default function OnboardingPage() {
                 </p>
                 <div className="grid sm:grid-cols-3 gap-4 text-center">
                   {[
-                    { icon: '🎯', label: 'Complete Quests' },
-                    { icon: '⭐', label: 'Earn XP' },
-                    { icon: '🏆', label: 'Unlock Badges' },
+                    { Icon: Target, label: 'Complete Quests', color: '#8B5CF6' },
+                    { Icon: Star, label: 'Earn XP', color: '#F59E0B' },
+                    { Icon: Trophy, label: 'Unlock Badges', color: '#10B981' },
                   ].map((item, i) => (
                     <div
                       key={i}
                       className="p-4 rounded-xl bg-secondary/50"
                     >
-                      <span className="text-3xl">{item.icon}</span>
+                      <item.Icon className="h-8 w-8 mx-auto" style={{ color: item.color }} />
                       <p className="font-medium mt-2">{item.label}</p>
                     </div>
                   ))}
@@ -220,10 +238,10 @@ export default function OnboardingPage() {
                       )}
                     >
                       <div
-                        className="h-14 w-14 rounded-xl flex items-center justify-center text-3xl shrink-0"
+                        className="h-14 w-14 rounded-xl flex items-center justify-center shrink-0"
                         style={{ backgroundColor: role.color + '20' }}
                       >
-                        {role.icon}
+                        <role.Icon className="h-7 w-7" style={{ color: role.color }} />
                       </div>
                       <div className="flex-1">
                         <p className="font-semibold">{role.name}</p>
@@ -261,7 +279,7 @@ export default function OnboardingPage() {
                           : 'hover:border-primary/50 hover:bg-secondary/50'
                       )}
                     >
-                      <span className="text-4xl">{level.icon}</span>
+                      <level.Icon className="h-10 w-10 mx-auto text-primary" />
                       <p className="font-semibold mt-3">{level.title}</p>
                       <p className="text-sm text-muted-foreground mt-1">
                         {level.description}
@@ -286,12 +304,16 @@ export default function OnboardingPage() {
                 <div className="p-6 rounded-xl bg-secondary/50 mb-8">
                   <p className="text-sm text-muted-foreground mb-2">Your Selected Path</p>
                   <div className="flex items-center justify-center gap-3">
-                    <span className="text-3xl">
-                      {ROLE_PATHS.find((r) => r.value === rolePath)?.icon}
-                    </span>
-                    <span className="text-xl font-semibold">
-                      {ROLE_PATHS.find((r) => r.value === rolePath)?.name}
-                    </span>
+                    {(() => {
+                      const selectedRole = ROLE_PATHS.find((r) => r.value === rolePath)
+                      if (!selectedRole) return null
+                      return (
+                        <>
+                          <selectedRole.Icon className="h-8 w-8" style={{ color: selectedRole.color }} />
+                          <span className="text-xl font-semibold">{selectedRole.name}</span>
+                        </>
+                      )
+                    })()}
                   </div>
                 </div>
               </div>

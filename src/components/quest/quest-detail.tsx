@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress'
 import { DifficultyBadge, RarityBadge } from '@/components/ui/badge'
 import { Modal } from '@/components/ui/modal'
 import { cn, formatTimeRemaining } from '@/lib/utils'
+import { DynamicIcon } from '@/lib/icons'
 import {
   Clock,
   CheckCircle,
@@ -17,6 +18,9 @@ import {
   Play,
   Send,
   AlertCircle,
+  PartyPopper,
+  Award,
+  Lightbulb,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -161,14 +165,14 @@ export function QuestDetail({
       if (result.leveledUp) {
         toast.success(`Level up! You're now level ${result.newLevel}!`, {
           duration: 5000,
-          icon: '🎉',
+          icon: <PartyPopper className="h-5 w-5 text-yellow-500" />,
         })
       }
       
       if (result.badgeAwarded) {
         toast.success(`Badge earned: ${result.badgeAwarded.name}!`, {
           duration: 5000,
-          icon: '🏆',
+          icon: <Award className="h-5 w-5 text-yellow-500" />,
         })
       }
       
@@ -189,10 +193,14 @@ export function QuestDetail({
             <div className="flex items-start gap-4">
               {quest.tree && (
                 <div
-                  className="h-16 w-16 rounded-xl flex items-center justify-center text-3xl"
+                  className="h-16 w-16 rounded-xl flex items-center justify-center"
                   style={{ backgroundColor: quest.tree.color + '20' }}
                 >
-                  {quest.tree.icon}
+                  <DynamicIcon 
+                    name={quest.tree.icon}
+                    className="h-8 w-8"
+                    style={{ color: quest.tree.color }}
+                  />
                 </div>
               )}
               <div>
@@ -432,7 +440,7 @@ export function QuestDetail({
               <ul className="space-y-2">
                 {quest.hints.map((hint, index) => (
                   <li key={index} className="flex items-start gap-2 text-sm text-muted-foreground">
-                    <span className="text-primary">💡</span>
+                    <Lightbulb className="h-4 w-4 text-yellow-500 shrink-0 mt-0.5" />
                     {hint}
                   </li>
                 ))}
@@ -447,8 +455,11 @@ export function QuestDetail({
         <Card className="border-yellow-500/30 bg-yellow-500/5">
           <CardContent className="p-6">
             <div className="flex items-center gap-4">
-              <div className="h-16 w-16 rounded-xl bg-yellow-500/10 flex items-center justify-center text-4xl">
-                {quest.badge.icon}
+              <div className="h-16 w-16 rounded-xl bg-yellow-500/10 flex items-center justify-center">
+                <DynamicIcon 
+                  name={quest.badge.icon} 
+                  className="h-8 w-8 text-yellow-500"
+                />
               </div>
               <div>
                 <div className="flex items-center gap-2">
