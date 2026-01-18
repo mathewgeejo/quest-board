@@ -48,7 +48,7 @@ export async function GET(request: Request) {
       let inProgressQuests = 0
       
       if (session?.user?.id && tree.quests) {
-        tree.quests.forEach((quest) => {
+        tree.quests.forEach((quest: any) => {
           const progress = quest.userProgress?.[0]
           if (progress?.status === 'COMPLETED') completedQuests++
           else if (progress?.status === 'IN_PROGRESS') inProgressQuests++
