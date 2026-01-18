@@ -58,32 +58,27 @@ export async function POST(request: Request) {
       description,
       difficulty,
       xpReward,
-      estimatedTime,
-      deadline,
+      estimatedHours,
       treeId,
-      layer,
-      order,
       tasks,
       resources,
-      hints,
-      isActive,
     } = body
+    
+    // Generate slug from name
+    const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
     
     const quest = await prisma.quest.create({
       data: {
+        slug,
         name,
         description: description || '',
         difficulty: difficulty || 'NOVICE',
-        xpReward: xpReward || 50,
-        estimatedTime: estimatedTime || 30,
-        deadline: deadline ? new Date(deadline) : null,
-        treeId: treeId || null,
-        layer: treeId ? (layer || 'FOUNDATIONS') : 'FOUNDATIONS',
-        order: order || 1,
+        xpReward: xpReward || 100,
+        estimatedHours: estimatedHours || 2,
+        treeId,
         tasks: tasks || [],
         resources: resources || [],
-        hints: hints || [],
-        isActive: isActive ?? true,
+        learningObjectives: [],
       },
     })
     

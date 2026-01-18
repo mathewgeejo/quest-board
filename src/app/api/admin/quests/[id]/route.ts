@@ -68,15 +68,10 @@ export async function PUT(
       description,
       difficulty,
       xpReward,
-      estimatedTime,
-      deadline,
+      estimatedHours,
       treeId,
-      layer,
-      order,
       tasks,
       resources,
-      hints,
-      isActive,
     } = body
     
     const quest = await prisma.quest.update({
@@ -85,16 +80,11 @@ export async function PUT(
         name,
         description: description || '',
         difficulty: difficulty || 'NOVICE',
-        xpReward: xpReward || 50,
-        estimatedTime: estimatedTime || 30,
-        deadline: deadline ? new Date(deadline) : null,
-        treeId: treeId || null,
-        layer: treeId ? (layer || 'FOUNDATIONS') : 'FOUNDATIONS',
-        order: order || 1,
+        xpReward: xpReward || 100,
+        estimatedHours: estimatedHours || 2,
+        treeId,
         tasks: tasks || [],
         resources: resources || [],
-        hints: hints || [],
-        isActive: isActive ?? true,
       },
     })
     
