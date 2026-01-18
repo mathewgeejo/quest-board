@@ -30,7 +30,21 @@ export default function SignInPage() {
       if (result?.error) {
         toast.error('Invalid email or password')
       } else {
-        router.push('/dashboard')
+        // Wait a moment for session to update
+        await new Promise(resolve => setTimeout(resolve, 500))
+        
+        // Check user onboarding status
+        const userRes = await fetch('/api/user')
+        if (userRes.ok) {
+          const userData = await userRes.json()
+          if (!userData.onboardingComplete) {
+            router.push('/onboarding')
+          } else {
+            router.push('/dashboard')
+          }
+        } else {
+          router.push('/dashboard')
+        }
       }
     } catch (error) {
       toast.error('Something went wrong')

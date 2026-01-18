@@ -171,7 +171,13 @@ export default function OnboardingPage() {
       }
       
       toast.success('Setup complete! Let the adventure begin!')
+      
+      // Update session with new onboarding status
       await updateSession({ onboardingComplete: true })
+      
+      // Wait a moment for session to fully update
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
       router.push('/dashboard')
     } catch (error) {
       toast.error('Something went wrong. Please try again.')
