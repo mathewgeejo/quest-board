@@ -3,7 +3,19 @@ import { withAuth } from 'next-auth/middleware'
 
 export default withAuth(
   function middleware(req) {
-    // Add any custom middleware logic here
+    const token = req.nextauth.token
+    const { pathname } = req.nextUrl
+    
+    // If user is authenticated and trying to access dashboard but hasn't completed onboarding
+    if (token && pathname === '/dashboard' && !token.onboardingComplete) {
+      return NextResponse.redirect(new URL('/onboarding', req.url))
+    }
+    
+    // If user completed onboarding and tries to access onboarding page, redirect to dashboard
+    if (token && pathname === '/onboarding' && token.onboardingComplete) {
+      return NextResponse.redirect(new URL('/dashboard', req.url))
+    }
+    
     return NextResponse.next()
   },
   {
