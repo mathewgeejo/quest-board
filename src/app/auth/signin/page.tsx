@@ -21,32 +21,55 @@ export default function SignInPage() {
     setIsLoading(true)
     
     try {
+      console.log('Attempting sign in...')
       const result = await signIn('credentials', {
         redirect: false,
         email,
         password,
       })
       
+      console.log('Sign in result:', result)
+      
       if (result?.error) {
+        console.error('Sign in error:', result.error)
         toast.error('Invalid email or password')
       } else {
+        console.log('Sign in successful, checking onboarding status...')
+        
         // Wait a moment for session to update
-        await new Promise(resolve => setTimeout(resolve, 500))
+        await new Promise(resolve => setTimeout(resolve, 1000))
         
         // Check user onboarding status
-        const userRes = await fetch('/api/user')
-        if (userRes.ok) {
-          const userData = await userRes.json()
-          if (!userData.onboardingComplete) {
-            router.push('/onboarding')
+        try {
+          const userRes = await fetch('/api/user')
+          console.log('User API response status:', userRes.status)
+          
+          if (userRes.ok) {
+            const userData = await userRes.json()
+            console.log('User data:', { 
+              id: userData.id, 
+              email: userData.email,
+              onboardingComplete: userData.onboardingComplete 
+            })
+            
+            if (!userData.onboardingComplete) {
+              console.log('Redirecting to onboarding...')
+              router.push('/onboarding')
+            } else {
+              console.log('Redirecting to dashboard...')
+              router.push('/dashboard')
+            }
           } else {
+            console.error('Failed to fetch user data, defaulting to dashboard')
             router.push('/dashboard')
           }
-        } else {
+        } catch (apiError) {
+          console.error('Error fetching user data:', apiError)
           router.push('/dashboard')
         }
       }
     } catch (error) {
+      console.error('Sign in exception:', error)
       toast.error('Something went wrong')
     } finally {
       setIsLoading(false)
