@@ -38,6 +38,7 @@ model User {
   rolePath       RolePath?
   onboardingComplete Boolean @default(false)
   advancedMode   Boolean   @default(false)
+  isAdmin        Boolean   @default(false)
   
   // Settings
   settings       UserSettings?
