@@ -216,6 +216,82 @@ quest-board/
 Required XP = 100 × level^1.5
 ```
 
+## 🚀 Deploy to Vercel
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/quest-board)
+
+### Quick Deploy Steps
+
+1. **Push to GitHub** (if not already done)
+   ```bash
+   git add .
+   git commit -m "Ready for deployment"
+   git push origin main
+   ```
+
+2. **Import to Vercel**
+   - Go to [vercel.com](https://vercel.com)
+   - Click "Import Project"
+   - Select your GitHub repository
+   - Vercel will auto-detect Next.js
+
+3. **Configure Environment Variables**
+   Add these in Vercel Dashboard → Settings → Environment Variables:
+   
+   ```env
+   DATABASE_URL=your_mongodb_connection_string
+   NEXTAUTH_URL=https://your-app.vercel.app
+   NEXTAUTH_SECRET=your_secret_key_here
+   GOOGLE_CLIENT_ID=your_google_client_id
+   GOOGLE_CLIENT_SECRET=your_google_client_secret
+   ```
+
+   **Generate NEXTAUTH_SECRET:**
+   ```bash
+   openssl rand -base64 32
+   ```
+
+4. **Update OAuth Redirect URIs**
+   Add to Google Cloud Console → Credentials:
+   ```
+   https://your-app.vercel.app/api/auth/callback/google
+   ```
+
+5. **MongoDB Atlas Configuration**
+   - Go to Network Access in MongoDB Atlas
+   - Add IP: `0.0.0.0/0` (allow all) for Vercel serverless functions
+   - Or whitelist specific Vercel IPs
+
+6. **Deploy**
+   - Click "Deploy" in Vercel
+   - Wait for build to complete
+   - Your app will be live! 🎉
+
+### Production Checklist
+
+- ✅ Environment variables configured
+- ✅ OAuth redirect URIs updated
+- ✅ MongoDB Atlas IP whitelist configured
+- ✅ NEXTAUTH_SECRET is unique and secure
+- ✅ Test sign-up and authentication
+- ✅ Run database seed: `npx prisma db seed`
+
+### Troubleshooting
+
+**Build fails with "Module not found":**
+- Run `npm install` locally to verify dependencies
+- Clear Vercel build cache and redeploy
+
+**Authentication doesn't work:**
+- Verify `NEXTAUTH_URL` matches your Vercel domain
+- Check OAuth redirect URIs include Vercel domain
+- Ensure all environment variables are set
+
+**Database connection fails:**
+- Confirm MongoDB Atlas allows connections from `0.0.0.0/0`
+- Verify `DATABASE_URL` is correct in Vercel environment variables
+- Check MongoDB Atlas cluster is running
+
 ## 🧪 Development
 
 ```bash
