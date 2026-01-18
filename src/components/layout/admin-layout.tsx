@@ -1,10 +1,9 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import { useSession } from 'next-auth/react'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import {
   LayoutDashboard,
   Swords,
@@ -15,8 +14,6 @@ import {
   Menu,
   X,
   Shield,
-  Plus,
-  List,
 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 
@@ -35,65 +32,8 @@ interface AdminLayoutProps {
 }
 
 export function AdminLayout({ children, title, subtitle }: AdminLayoutProps) {
-  const { data: session, status } = useSession()
-  const router = useRouter()
   const pathname = usePathname()
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [isAdmin, setIsAdmin] = useState<boolean | null>(null)
-  const [loading, setLoading] = useState(true)
-
-  useEffect(() => {
-    if (status === 'unauthenticated') {
-      router.push('/auth/signin')
-      return
-    }
-    
-    if (status === 'authenticated') {
-      checkAdminStatus()
-    }
-  }, [status, router])
-
-  const checkAdminStatus = async () => {
-    try {
-      const res = await fetch('/api/admin/check')
-      if (res.ok) {
-        const data = await res.json()
-        setIsAdmin(data.isAdmin)
-        if (!data.isAdmin) {
-          router.push('/dashboard')
-        }
-      } else {
-        router.push('/dashboard')
-      }
-    } catch (error) {
-      router.push('/dashboard')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  if (status === 'loading' || loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    )
-  }
-
-  if (!isAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <Shield className="h-16 w-16 mx-auto text-muted-foreground mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Access Denied</h1>
-          <p className="text-muted-foreground mb-4">You don't have permission to access this area.</p>
-          <Link href="/dashboard">
-            <Button>Go to Dashboard</Button>
-          </Link>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <div className="min-h-screen bg-background">
