@@ -35,6 +35,15 @@ export async function POST(request: Request) {
       resources,
     } = body
     
+    // Validate required fields
+    if (!name || !name.trim()) {
+      return NextResponse.json({ error: 'Quest name is required' }, { status: 400 })
+    }
+    
+    if (!treeId) {
+      return NextResponse.json({ error: 'Quest tree is required' }, { status: 400 })
+    }
+    
     // Generate slug from name
     const slug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
     
