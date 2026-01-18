@@ -267,7 +267,7 @@ export default function ProfilePage() {
                       {xpProgress.current} / {xpProgress.required} XP
                     </span>
                   </div>
-                  <Progress value={xpProgress.percent} variant="gradient" />
+                  <Progress value={xpProgress.percentage} variant="gradient" />
                 </div>
                 
                 {/* Stats Row */}
