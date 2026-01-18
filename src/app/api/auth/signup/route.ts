@@ -4,10 +4,27 @@ import { prisma } from '@/lib/prisma'
 import { signUpSchema } from '@/lib/validations'
 
 // Generate a unique username from email
-function generateUsername(email: string): string {
+async function generateUniqueUsername(email: string): Promise<string> {
   const base = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '')
-  const random = Math.random().toString(36).substring(2, 6)
-  return `${base}_${random}`
+  
+  // Try up to 10 times to generate a unique username
+  for (let i = 0; i < 10; i++) {
+    const random = Math.random().toString(36).substring(2, 6)
+    const username = `${base}_${random}`
+    
+    // Check if this username already exists
+    const existing = await prisma.user.findUnique({
+      where: { username },
+      select: { id: true },
+    })
+    
+    if (!existing) {
+      return username
+    }
+  }
+  
+  // If all attempts fail, use timestamp
+  return `${base}_${Date.now().toString(36)}`
 }
 
 export async function POST(request: Request) {
@@ -41,7 +58,7 @@ export async function POST(request: Request) {
     const passwordHash = await bcrypt.hash(password, 12)
     
     // Generate unique username
-    const username = generateUsername(email)
+    const username = await generateUniqueUsername(email)
     
     // Create user
     const user = await prisma.user.create({
@@ -73,6 +90,12 @@ export async function POST(request: Request) {
     )
   } catch (error: any) {
     console.error('Signup error:', error)
+    console.error('Error details:', {
+      message: error.message,
+      code: error.code,
+      meta: error.meta,
+      stack: error.stack,
+    })
     
     // Handle Prisma unique constraint errors
     if (error.code === 'P2002') {
@@ -92,6 +115,14 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: 'Account already exists' },
         { status: 400 }
+      )
+    }
+    
+    // Handle database connection errors
+    if (error.code === 'P1001' || error.code === 'P1002') {
+      return NextResponse.json(
+        { error: 'Database connection failed. Please try again.' },
+        { status: 500 }
       )
     }
     
