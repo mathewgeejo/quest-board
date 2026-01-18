@@ -37,7 +37,7 @@ export async function GET(request: Request) {
         id: true,
         name: true,
         username: true,
-        avatarUrl: true,
+        avatar: true,
         totalXP: true,
         currentLevel: true,
         rolePath: true,
@@ -51,7 +51,7 @@ export async function GET(request: Request) {
         },
         ...(startDate
           ? {
-              xpTransactions: {
+              xpHistory: {
                 where: {
                   createdAt: { gte: startDate },
                 },
@@ -69,7 +69,7 @@ export async function GET(request: Request) {
     // Calculate rankings
     const leaderboard = users.map((user, index) => {
       const periodXP = startDate
-        ? user.xpTransactions?.reduce((sum, tx) => sum + tx.amount, 0) || 0
+        ? (user as any).xpHistory?.reduce((sum: number, tx: any) => sum + tx.amount, 0) || 0
         : user.totalXP
       
       return {
@@ -77,7 +77,7 @@ export async function GET(request: Request) {
         userId: user.id,
         name: user.name,
         username: user.username,
-        avatarUrl: user.avatarUrl,
+        avatarUrl: user.avatar,
         totalXP: user.totalXP,
         periodXP,
         level: user.currentLevel,
@@ -110,7 +110,7 @@ export async function GET(request: Request) {
           id: true,
           name: true,
           username: true,
-          avatarUrl: true,
+          avatar: true,
           totalXP: true,
           currentLevel: true,
           rolePath: true,
@@ -129,7 +129,7 @@ export async function GET(request: Request) {
           userId: user.id,
           name: user.name,
           username: user.username,
-          avatarUrl: user.avatarUrl,
+          avatarUrl: user.avatar,
           totalXP: user.totalXP,
           periodXP: user.totalXP,
           level: user.currentLevel,

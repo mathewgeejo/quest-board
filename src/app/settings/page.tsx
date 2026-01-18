@@ -19,6 +19,7 @@ import {
   Save,
   User,
   Palette,
+  RotateCcw,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 
@@ -44,6 +45,7 @@ export default function SettingsPage() {
   const [newPassword, setNewPassword] = useState('')
   const [confirmPassword, setConfirmPassword] = useState('')
   const [isSaving, setIsSaving] = useState(false)
+  const [isResetting, setIsResetting] = useState(false)
   
   useEffect(() => {
     if (status === 'unauthenticated') {
@@ -131,6 +133,33 @@ export default function SettingsPage() {
   const handleDeleteAccount = () => {
     // This would trigger a confirmation modal in a real app
     toast.error('Account deletion is not available in demo mode')
+  }
+  
+  const handleResetProgress = async () => {
+    if (!confirm('Are you sure you want to reset all your progress? This will reset your XP, level, streak, and clear all quest progress. This cannot be undone!')) {
+      return
+    }
+    
+    setIsResetting(true)
+    try {
+      const res = await fetch('/api/user/reset', {
+        method: 'POST',
+      })
+      
+      if (res.ok) {
+        toast.success('Progress reset successfully! Refreshing...')
+        setTimeout(() => {
+          window.location.reload()
+        }, 1000)
+      } else {
+        const data = await res.json()
+        toast.error(data.error || 'Failed to reset progress')
+      }
+    } catch (error) {
+      toast.error('Failed to reset progress')
+    } finally {
+      setIsResetting(false)
+    }
   }
   
   if (status === 'loading') {
@@ -324,13 +353,36 @@ export default function SettingsPage() {
               Danger Zone
             </CardTitle>
           </CardHeader>
-          <CardContent>
-            <p className="text-sm text-muted-foreground mb-4">
-              Once you delete your account, there is no going back. Please be certain.
-            </p>
-            <Button variant="destructive" onClick={handleDeleteAccount}>
-              Delete Account
-            </Button>
+          <CardContent className="space-y-6">
+            {/* Reset Progress */}
+            <div>
+              <h4 className="font-medium mb-2">Reset Progress</h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Reset your XP, level, streak, and all quest progress. Your account and settings will be preserved.
+              </p>
+              <Button
+                variant="outline"
+                className="border-orange-500 text-orange-500 hover:bg-orange-500/10"
+                onClick={handleResetProgress}
+                disabled={isResetting}
+              >
+                <RotateCcw className="h-4 w-4 mr-2" />
+                {isResetting ? 'Resetting...' : 'Reset All Progress'}
+              </Button>
+            </div>
+            
+            <hr className="border-destructive/20" />
+            
+            {/* Delete Account */}
+            <div>
+              <h4 className="font-medium mb-2">Delete Account</h4>
+              <p className="text-sm text-muted-foreground mb-4">
+                Once you delete your account, there is no going back. Please be certain.
+              </p>
+              <Button variant="destructive" onClick={handleDeleteAccount}>
+                Delete Account
+              </Button>
+            </div>
           </CardContent>
         </Card>
         

@@ -10,33 +10,33 @@ export function cn(...inputs: ClassValue[]) {
 // ============================================
 
 export function calculateLevel(totalXP: number): number {
-  // Level thresholds from the design doc
+  // Lower XP thresholds for faster progression
   const thresholds = [
     0,      // Level 1
-    100,    // Level 2
-    350,    // Level 3
-    750,    // Level 4
-    1350,   // Level 5
-    2150,   // Level 6
-    3150,   // Level 7
-    4400,   // Level 8
-    5900,   // Level 9
-    7700,   // Level 10
-    9800,   // Level 11
-    12200,  // Level 12
-    15000,  // Level 13
-    18200,  // Level 14
-    21800,  // Level 15
-    25800,  // Level 16
-    30200,  // Level 17
-    35000,  // Level 18
-    40200,  // Level 19
-    45800,  // Level 20
-    52000,  // Level 21
-    58800,  // Level 22
-    66200,  // Level 23
-    74200,  // Level 24
-    82800,  // Level 25
+    50,     // Level 2
+    125,    // Level 3
+    225,    // Level 4
+    350,    // Level 5
+    500,    // Level 6
+    700,    // Level 7
+    950,    // Level 8
+    1250,   // Level 9
+    1600,   // Level 10
+    2000,   // Level 11
+    2500,   // Level 12
+    3100,   // Level 13
+    3800,   // Level 14
+    4600,   // Level 15
+    5500,   // Level 16
+    6500,   // Level 17
+    7700,   // Level 18
+    9000,   // Level 19
+    10500,  // Level 20
+    12200,  // Level 21
+    14100,  // Level 22
+    16200,  // Level 23
+    18500,  // Level 24
+    21000,  // Level 25
   ]
   
   for (let i = thresholds.length - 1; i >= 0; i--) {
@@ -48,9 +48,9 @@ export function calculateLevel(totalXP: number): number {
 }
 
 export function getXPForLevel(level: number): number {
-  const thresholds = [0, 100, 350, 750, 1350, 2150, 3150, 4400, 5900, 7700, 
-    9800, 12200, 15000, 18200, 21800, 25800, 30200, 35000, 40200, 45800,
-    52000, 58800, 66200, 74200, 82800]
+  const thresholds = [0, 50, 125, 225, 350, 500, 700, 950, 1250, 1600, 
+    2000, 2500, 3100, 3800, 4600, 5500, 6500, 7700, 9000, 10500,
+    12200, 14100, 16200, 18500, 21000]
   return thresholds[level - 1] || 0
 }
 

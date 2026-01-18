@@ -1,10 +1,11 @@
 'use client'
 
-import { cn } from '@/lib/utils'
+import { cn, calculateLevel, getXPForLevel } from '@/lib/utils'
 import { useUIStore } from '@/lib/store'
 import { useSession } from 'next-auth/react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import {
   LayoutDashboard,
   Map,
@@ -37,17 +38,59 @@ const secondaryNavigation = [
   { name: 'Settings', href: '/settings', icon: Settings },
 ]
 
+interface UserStats {
+  level: number
+  xp: number
+  xpToNextLevel: number
+  xpProgress: number
+  streak: number
+}
+
 export function Sidebar() {
   const pathname = usePathname()
   const { data: session } = useSession()
   const { sidebarOpen, toggleSidebar } = useUIStore()
+  const [userStats, setUserStats] = useState<UserStats>({
+    level: 1,
+    xp: 0,
+    xpToNextLevel: 50,
+    xpProgress: 0,
+    streak: 0,
+  })
   
-  // Mock user data - in real app, this comes from API
-  const userStats = {
-    level: 5,
-    xp: 2350,
-    xpToNextLevel: 3000,
-    streak: 7,
+  // Fetch real user data
+  useEffect(() => {
+    if (session?.user) {
+      fetchUserStats()
+    }
+  }, [session])
+  
+  const fetchUserStats = async () => {
+    try {
+      const res = await fetch('/api/user/stats')
+      if (res.ok) {
+        const data = await res.json()
+        const totalXP = data.user?.totalXP || 0
+        const streak = data.user?.streakCount || 0
+        
+        // Calculate level and XP progress from totalXP
+        const level = calculateLevel(totalXP)
+        const currentLevelXP = getXPForLevel(level)
+        const nextLevelXP = getXPForLevel(level + 1)
+        const xpProgress = totalXP - currentLevelXP
+        const xpToNextLevel = nextLevelXP - currentLevelXP
+        
+        setUserStats({
+          level,
+          xp: xpProgress,
+          xpToNextLevel: xpToNextLevel || 50,
+          xpProgress: xpToNextLevel > 0 ? Math.round((xpProgress / xpToNextLevel) * 100) : 100,
+          streak,
+        })
+      }
+    } catch (error) {
+      console.error('Failed to fetch user stats:', error)
+    }
   }
   
   return (

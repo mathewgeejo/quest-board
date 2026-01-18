@@ -14,7 +14,7 @@ export async function GET(request: Request) {
     
     const where: any = { isPublished: true }
     
-    if (rolePath) where.rolePaths = { has: rolePath }
+    if (rolePath) where.roleRelevance = { has: rolePath }
     if (layer) where.layer = layer
     
     const trees = await prisma.questTree.findMany({

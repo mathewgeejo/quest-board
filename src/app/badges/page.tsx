@@ -12,6 +12,14 @@ import { cn } from '@/lib/utils'
 import { DynamicIcon } from '@/lib/icons'
 import { Trophy, Lock, CheckCircle } from 'lucide-react'
 
+interface BadgeCriteria {
+  type: string
+  target?: number
+  questIds: string[]
+  treeIds: string[]
+  conditions?: string | null
+}
+
 interface Badge {
   id: string
   name: string
@@ -19,10 +27,42 @@ interface Badge {
   icon: string
   type: string
   rarity: 'COMMON' | 'UNCOMMON' | 'RARE' | 'EPIC' | 'LEGENDARY'
-  criteria: string
+  criteria: BadgeCriteria
   earned: boolean
   earnedAt: string | null
   earnedCount: number
+}
+
+// Helper function to format criteria for display
+function formatCriteria(criteria: BadgeCriteria): string {
+  const { type, target, conditions } = criteria
+  let conditionData: Record<string, any> = {}
+  
+  if (conditions) {
+    try {
+      conditionData = JSON.parse(conditions)
+    } catch {
+      // ignore parse errors
+    }
+  }
+  
+  switch (type) {
+    case 'quest_complete':
+      return `Complete ${target || 1} quest${(target || 1) > 1 ? 's' : ''}`
+    case 'streak':
+      return `Maintain a ${target}-day streak`
+    case 'role_quests':
+      const role = conditionData.role?.toLowerCase() || 'any'
+      return `Complete ${target} ${role} quests`
+    case 'multi_role':
+      const roles = conditionData.roles?.map((r: string) => r.toLowerCase()).join(' and ') || 'multiple roles'
+      return `Complete ${target} quests across ${roles}`
+    case 'difficulty_complete':
+      const difficulty = conditionData.difficulty?.toLowerCase() || 'any'
+      return `Complete ${target} ${difficulty} difficulty quest${(target || 1) > 1 ? 's' : ''}`
+    default:
+      return criteria.type
+  }
 }
 
 export default function BadgesPage() {
@@ -224,7 +264,7 @@ export default function BadgesPage() {
                   {!badge.earned && (
                     <div className="mt-4 pt-4 border-t">
                       <p className="text-xs text-muted-foreground">
-                        <strong>How to earn:</strong> {badge.criteria}
+                        <strong>How to earn:</strong> {formatCriteria(badge.criteria)}
                       </p>
                     </div>
                   )}

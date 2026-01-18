@@ -67,19 +67,44 @@ export const authOptions: NextAuthOptions = {
   },
   pages: {
     signIn: '/auth/signin',
-    signUp: '/auth/signup',
     error: '/auth/error',
   },
   callbacks: {
-    async jwt({ token, user, trigger, session }) {
+    async signIn({ user, account, profile }) {
+      // For OAuth providers (Google, GitHub), ensure user exists in database
+      if (account?.provider === 'google' || account?.provider === 'github') {
+        const existingUser = await prisma.user.findUnique({
+          where: { email: user.email! },
+        })
+        
+        // If user doesn't exist, the PrismaAdapter will create it
+        // We don't need to do anything special here
+        return true
+      }
+      return true
+    },
+    async jwt({ token, user, trigger, session, account }) {
       if (user) {
         token.id = user.id
+        
+        // Check if user just signed in with OAuth
+        if (account?.provider === 'google' || account?.provider === 'github') {
+          // Fetch the user to check onboarding status
+          const dbUser = await prisma.user.findUnique({
+            where: { id: user.id },
+            select: { onboardingComplete: true },
+          })
+          token.onboardingComplete = dbUser?.onboardingComplete || false
+        }
       }
       
       // Handle session updates
       if (trigger === 'update' && session) {
         token.name = session.name
         token.picture = session.image
+        if (session.onboardingComplete !== undefined) {
+          token.onboardingComplete = session.onboardingComplete
+        }
       }
       
       return token
@@ -87,6 +112,7 @@ export const authOptions: NextAuthOptions = {
     async session({ session, token }) {
       if (session.user) {
         session.user.id = token.id as string
+        session.user.onboardingComplete = token.onboardingComplete as boolean
       }
       return session
     },

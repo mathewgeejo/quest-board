@@ -3,6 +3,13 @@ import bcrypt from 'bcryptjs'
 import { prisma } from '@/lib/prisma'
 import { signUpSchema } from '@/lib/validations'
 
+// Generate a unique username from email
+function generateUsername(email: string): string {
+  const base = email.split('@')[0].toLowerCase().replace(/[^a-z0-9]/g, '')
+  const random = Math.random().toString(36).substring(2, 6)
+  return `${base}_${random}`
+}
+
 export async function POST(request: Request) {
   try {
     const body = await request.json()
@@ -33,11 +40,15 @@ export async function POST(request: Request) {
     // Hash password
     const passwordHash = await bcrypt.hash(password, 12)
     
+    // Generate unique username
+    const username = generateUsername(email)
+    
     // Create user
     const user = await prisma.user.create({
       data: {
         name,
         email,
+        username,
         passwordHash,
         settings: {
           theme: 'dark',
@@ -60,8 +71,30 @@ export async function POST(request: Request) {
       { message: 'Account created successfully', user },
       { status: 201 }
     )
-  } catch (error) {
+  } catch (error: any) {
     console.error('Signup error:', error)
+    
+    // Handle Prisma unique constraint errors
+    if (error.code === 'P2002') {
+      const target = error.meta?.target
+      if (target?.includes('email')) {
+        return NextResponse.json(
+          { error: 'An account with this email already exists' },
+          { status: 400 }
+        )
+      }
+      if (target?.includes('username')) {
+        return NextResponse.json(
+          { error: 'This username is already taken' },
+          { status: 400 }
+        )
+      }
+      return NextResponse.json(
+        { error: 'Account already exists' },
+        { status: 400 }
+      )
+    }
+    
     return NextResponse.json(
       { error: 'Something went wrong. Please try again.' },
       { status: 500 }

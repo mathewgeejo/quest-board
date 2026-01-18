@@ -17,21 +17,40 @@ export default function TreesPage() {
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [selectedLayer, setSelectedLayer] = useState<string | null>(null)
+  const [userRolePath, setUserRolePath] = useState<string | null>(null)
+  const [filterByRole, setFilterByRole] = useState(true)
   
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/auth/signin')
+    } else if (status === 'authenticated') {
+      fetchUserRole()
     }
   }, [status, router])
   
   useEffect(() => {
-    fetchTrees()
-  }, [selectedLayer])
+    if (userRolePath !== null || !filterByRole) {
+      fetchTrees()
+    }
+  }, [selectedLayer, userRolePath, filterByRole])
+  
+  const fetchUserRole = async () => {
+    try {
+      const res = await fetch('/api/user')
+      if (res.ok) {
+        const userData = await res.json()
+        setUserRolePath(userData.rolePath || null)
+      }
+    } catch (error) {
+      console.error('Failed to fetch user role:', error)
+    }
+  }
   
   const fetchTrees = async () => {
     try {
       const params = new URLSearchParams()
       if (selectedLayer) params.append('layer', selectedLayer)
+      if (filterByRole && userRolePath) params.append('rolePath', userRolePath)
       
       const res = await fetch(`/api/trees?${params}`)
       if (res.ok) {
@@ -90,6 +109,15 @@ export default function TreesPage() {
           </div>
           
           <div className="flex gap-2 flex-wrap">
+            {userRolePath && (
+              <Button
+                variant={filterByRole ? 'default' : 'outline'}
+                size="sm"
+                onClick={() => setFilterByRole(!filterByRole)}
+              >
+                {filterByRole ? 'My Role Only' : 'All Roles'}
+              </Button>
+            )}
             {layers.map((layer) => (
               <Button
                 key={layer.value || 'all'}

@@ -49,8 +49,26 @@ export default function DashboardPage() {
   useEffect(() => {
     if (status === 'unauthenticated') {
       router.push('/auth/signin')
+    } else if (status === 'authenticated') {
+      // Check if user needs onboarding
+      checkOnboarding()
     }
   }, [status, router])
+  
+  const checkOnboarding = async () => {
+    try {
+      const res = await fetch('/api/user')
+      if (res.ok) {
+        const userData = await res.json()
+        if (!userData.onboardingComplete) {
+          router.push('/onboarding')
+          return
+        }
+      }
+    } catch (error) {
+      console.error('Failed to check onboarding status:', error)
+    }
+  }
   
   useEffect(() => {
     if (session?.user) {

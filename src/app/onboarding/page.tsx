@@ -17,6 +17,7 @@ import {
   Wrench,
   Rocket,
   BarChart3,
+  Shield,
   Sprout,
   Leaf,
   TreeDeciduous,
@@ -81,11 +82,18 @@ const ROLE_PATHS: { value: string; Icon: LucideIcon; name: string; color: string
     description: 'Learn both frontend and backend development.',
   },
   {
-    value: 'DATA',
+    value: 'SECURITY',
+    Icon: Shield,
+    name: 'Security Engineer',
+    color: '#EF4444',
+    description: 'Master application security, penetration testing, and compliance.',
+  },
+  {
+    value: 'PRODUCT',
     Icon: BarChart3,
-    name: 'Data Engineer',
+    name: 'Product Manager',
     color: '#EC4899',
-    description: 'Work with data pipelines, analytics, and databases.',
+    description: 'Learn product strategy, user research, and agile methodologies.',
   },
 ]
 
