@@ -73,15 +73,14 @@ export default function NewQuestPage() {
     
     try {
       const payload = {
-        ...formData,
+        name: formData.name,
+        description: formData.description,
+        difficulty: formData.difficulty,
         xpReward: Number(formData.xpReward),
-        estimatedTime: Number(formData.estimatedTime),
-        order: Number(formData.order),
-        deadline: formData.deadline || null,
-        treeId: formData.treeId || null,
+        estimatedHours: Number(formData.estimatedTime),
+        treeId: formData.treeId,
         tasks: tasks.filter((t) => t.title.trim()),
         resources: resources.filter((r) => r.trim()),
-        hints: hints.filter((h) => h.trim()),
       }
       
       const res = await fetch('/api/admin/quests', {
