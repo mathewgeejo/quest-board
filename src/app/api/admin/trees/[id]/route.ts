@@ -101,8 +101,6 @@ export async function PUT(
         slug,
         color: color || '#6366f1',
         icon: icon || 'BookOpen',
-        rolePath: rolePath || null,
-        isActive: isActive ?? true,
       },
     })
     
@@ -128,11 +126,17 @@ export async function DELETE(
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
     }
     
-    // Unlink all quests from this tree (don't delete them)
-    await prisma.quest.updateMany({
+    // Check if tree has quests
+    const questCount = await prisma.quest.count({
       where: { treeId: params.id },
-      data: { treeId: null },
     })
+    
+    if (questCount > 0) {
+      return NextResponse.json(
+        { error: `Cannot delete tree with ${questCount} linked quest(s). Please remove quests first.` },
+        { status: 400 }
+      )
+    }
     
     // Delete the tree
     await prisma.questTree.delete({

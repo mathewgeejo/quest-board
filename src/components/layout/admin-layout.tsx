@@ -131,9 +131,7 @@ export function AdminLayout({ children, title, subtitle }: AdminLayoutProps) {
           </div>
 
           <div className="flex items-center gap-2">
-            <span className="text-sm text-muted-foreground hidden sm:block">
-              {session?.user?.email}
-            </span>
+            {/* User info can go here */}
           </div>
         </header>
 

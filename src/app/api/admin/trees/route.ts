@@ -79,8 +79,6 @@ export async function POST(request: Request) {
         slug,
         color: color || '#6366f1',
         icon: icon || 'BookOpen',
-        rolePath: rolePath || null,
-        isActive: isActive ?? true,
       },
     })
     
