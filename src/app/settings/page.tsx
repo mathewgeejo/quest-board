@@ -318,19 +318,19 @@ export default function SettingsPage() {
             <form onSubmit={handleChangePassword} className="space-y-4">
               <Input
                 type="password"
-                label="Current Password"
+                placeholder="Current Password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
               />
               <Input
                 type="password"
-                label="New Password"
+                placeholder="New Password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
               />
               <Input
                 type="password"
-                label="Confirm New Password"
+                placeholder="Confirm New Password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
               />
