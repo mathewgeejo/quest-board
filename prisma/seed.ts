@@ -350,7 +350,7 @@ async function main() {
       roleRelevance: [RolePath.FRONTEND, RolePath.FULLSTACK],
       prerequisiteTreeIds: [toolsTree.id],
       order: 4,
-      layer: TreeLayer.FRONTEND,
+      layer: TreeLayer.SPECIALIZATION,
     },
   })
 
@@ -369,7 +369,7 @@ async function main() {
       roleRelevance: [RolePath.FRONTEND, RolePath.FULLSTACK],
       prerequisiteTreeIds: [frontendBasicsTree.id],
       order: 5,
-      layer: TreeLayer.FRONTEND,
+      layer: TreeLayer.SPECIALIZATION,
     },
   })
 
@@ -388,7 +388,7 @@ async function main() {
       roleRelevance: [RolePath.BACKEND, RolePath.FULLSTACK],
       prerequisiteTreeIds: [toolsTree.id, frontendBasicsTree.id],
       order: 6,
-      layer: TreeLayer.BACKEND,
+      layer: TreeLayer.SPECIALIZATION,
     },
   })
 
@@ -407,7 +407,7 @@ async function main() {
       roleRelevance: [RolePath.BACKEND, RolePath.FULLSTACK, RolePath.DEVOPS],
       prerequisiteTreeIds: [backendTree.id],
       order: 7,
-      layer: TreeLayer.DATABASE,
+      layer: TreeLayer.SPECIALIZATION,
     },
   })
 
@@ -426,7 +426,7 @@ async function main() {
       roleRelevance: [RolePath.DEVOPS, RolePath.BACKEND, RolePath.FULLSTACK],
       prerequisiteTreeIds: [linuxTree.id],
       order: 8,
-      layer: TreeLayer.DEVOPS,
+      layer: TreeLayer.SPECIALIZATION,
     },
   })
 
@@ -445,7 +445,7 @@ async function main() {
       roleRelevance: [RolePath.DEVOPS, RolePath.BACKEND, RolePath.FULLSTACK],
       prerequisiteTreeIds: [toolsTree.id, dockerTree.id],
       order: 9,
-      layer: TreeLayer.DEVOPS,
+      layer: TreeLayer.SPECIALIZATION,
     },
   })
 
@@ -464,7 +464,7 @@ async function main() {
       roleRelevance: [RolePath.DEVOPS, RolePath.BACKEND, RolePath.FULLSTACK],
       prerequisiteTreeIds: [dockerTree.id, cicdTree.id],
       order: 10,
-      layer: TreeLayer.DEVOPS,
+      layer: TreeLayer.SPECIALIZATION,
     },
   })
 
@@ -483,7 +483,7 @@ async function main() {
       roleRelevance: [RolePath.SECURITY, RolePath.BACKEND, RolePath.DEVOPS, RolePath.FULLSTACK],
       prerequisiteTreeIds: [backendTree.id, linuxTree.id],
       order: 11,
-      layer: TreeLayer.SECURITY,
+      layer: TreeLayer.CAPSTONE,
     },
   })
 
@@ -502,7 +502,7 @@ async function main() {
       roleRelevance: [RolePath.DEVOPS, RolePath.BACKEND, RolePath.FULLSTACK],
       prerequisiteTreeIds: [cloudTree.id],
       order: 12,
-      layer: TreeLayer.MONITORING,
+      layer: TreeLayer.CAPSTONE,
     },
   })
 
