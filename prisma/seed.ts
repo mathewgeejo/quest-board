@@ -312,7 +312,7 @@ async function main() {
       roleRelevance: [RolePath.DEVOPS, RolePath.BACKEND, RolePath.FRONTEND, RolePath.SECURITY, RolePath.FULLSTACK],
       prerequisiteTreeIds: [foundationsTree.id],
       order: 2,
-      layer: TreeLayer.TOOLS,
+      layer: TreeLayer.TOOL_MASTERY,
     },
   })
 
@@ -331,7 +331,7 @@ async function main() {
       roleRelevance: [RolePath.DEVOPS, RolePath.BACKEND, RolePath.SECURITY, RolePath.FULLSTACK],
       prerequisiteTreeIds: [toolsTree.id],
       order: 3,
-      layer: TreeLayer.TOOLS,
+      layer: TreeLayer.TOOL_MASTERY,
     },
   })
 
