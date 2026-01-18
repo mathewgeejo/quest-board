@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import {
@@ -15,20 +17,24 @@ import {
   Wrench,
   Rocket,
   BarChart3,
+  Menu,
+  X,
   type LucideIcon,
 } from 'lucide-react'
+import { useState } from 'react'
 
 export default function HomePage() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="border-b">
+      <header className="border-b sticky top-0 z-50 bg-background/95 backdrop-blur">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-2">
-            <div className="h-10 w-10 rounded-lg gradient-primary flex items-center justify-center">
-              <Swords className="h-6 w-6 text-white" />
+            <div className="h-8 sm:h-10 w-8 sm:w-10 rounded-lg gradient-primary flex items-center justify-center">
+              <Swords className="h-5 sm:h-6 w-5 sm:w-6 text-white" />
             </div>
-            <span className="font-bold text-xl">QuestBoard</span>
+            <span className="font-bold text-lg sm:text-xl">QuestBoard</span>
           </Link>
           
           <nav className="hidden md:flex items-center gap-6">
@@ -43,7 +49,7 @@ export default function HomePage() {
             </Link>
           </nav>
           
-          <div className="flex items-center gap-3">
+          <div className="hidden md:flex items-center gap-3">
             <Link href="/auth/signin">
               <Button variant="ghost">Sign In</Button>
             </Link>
@@ -51,67 +57,98 @@ export default function HomePage() {
               <Button>Get Started</Button>
             </Link>
           </div>
+          
+          {/* Mobile menu button */}
+          <button
+            className="md:hidden p-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          >
+            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
         </div>
+        
+        {/* Mobile menu */}
+        {mobileMenuOpen && (
+          <div className="md:hidden border-t bg-background">
+            <nav className="container mx-auto px-4 py-4 flex flex-col gap-3">
+              <Link href="#features" className="py-2 text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(false)}>
+                Features
+              </Link>
+              <Link href="#paths" className="py-2 text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(false)}>
+                Learning Paths
+              </Link>
+              <Link href="#how-it-works" className="py-2 text-muted-foreground hover:text-foreground" onClick={() => setMobileMenuOpen(false)}>
+                How It Works
+              </Link>
+              <Link href="/auth/signin" className="mt-2">
+                <Button variant="ghost" className="w-full">Sign In</Button>
+              </Link>
+              <Link href="/auth/signup">
+                <Button className="w-full">Get Started</Button>
+              </Link>
+            </nav>
+          </div>
+        )}
       </header>
       
       {/* Hero Section */}
-      <section className="py-20 px-4">
+      <section className="py-12 sm:py-16 md:py-20 px-4">
         <div className="container mx-auto text-center max-w-4xl">
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-            <Zap className="h-4 w-4" />
+          <div className="inline-flex items-center gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-primary/10 text-primary text-xs sm:text-sm font-medium mb-4 sm:mb-6">
+            <Zap className="h-3 sm:h-4 w-3 sm:w-4" />
             Learn to code through epic quests
           </div>
           
-          <h1 className="text-5xl md:text-6xl font-bold mb-6">
+          <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold mb-4 sm:mb-6 px-2">
             Your Journey to Becoming a{' '}
             <span className="gradient-text">Developer</span>{' '}
             Starts Here
           </h1>
           
-          <p className="text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg md:text-xl text-muted-foreground mb-6 sm:mb-8 max-w-2xl mx-auto px-4">
             QuestBoard transforms coding education into an exciting adventure. Complete quests, 
             earn XP, unlock badges, and build a portfolio that showcases your skills.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link href="/auth/signup">
-              <Button size="lg" className="px-8">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-4 px-4">
+            <Link href="/auth/signup" className="w-full sm:w-auto">
+              <Button size="lg" className="w-full sm:w-auto px-6 sm:px-8">
                 Start Your Quest
-                <ArrowRight className="ml-2 h-5 w-5" />
+                <ArrowRight className="ml-2 h-4 sm:h-5 w-4 sm:w-5" />
               </Button>
             </Link>
-            <Link href="#how-it-works">
-              <Button variant="outline" size="lg">
+            <Link href="#how-it-works" className="w-full sm:w-auto">
+              <Button variant="outline" size="lg" className="w-full sm:w-auto">
                 Learn More
               </Button>
             </Link>
           </div>
           
           {/* Stats */}
-          <div className="grid grid-cols-3 gap-8 mt-16 max-w-2xl mx-auto">
+          <div className="grid grid-cols-3 gap-4 sm:gap-8 mt-12 sm:mt-16 max-w-2xl mx-auto">
             <div>
-              <p className="text-4xl font-bold gradient-text">100+</p>
-              <p className="text-muted-foreground">Quests</p>
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">100+</p>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground">Quests</p>
             </div>
             <div>
-              <p className="text-4xl font-bold gradient-text">50+</p>
-              <p className="text-muted-foreground">Badges</p>
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">50+</p>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground">Badges</p>
             </div>
             <div>
-              <p className="text-4xl font-bold gradient-text">5</p>
-              <p className="text-muted-foreground">Role Paths</p>
+              <p className="text-2xl sm:text-3xl md:text-4xl font-bold gradient-text">5</p>
+              <p className="text-xs sm:text-sm md:text-base text-muted-foreground">Role Paths</p>
             </div>
           </div>
         </div>
       </section>
       
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 bg-secondary/30">
+      <section id="features" className="py-12 sm:py-16 md:py-20 px-4 bg-secondary/30">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl font-bold text-center mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3 sm:mb-4">
             Why Choose QuestBoard?
           </h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-muted-foreground text-center mb-8 sm:mb-12 max-w-2xl mx-auto px-4">
             We've gamified the learning experience to make coding education engaging, 
             motivating, and fun.
           </p>
@@ -165,12 +202,12 @@ export default function HomePage() {
       </section>
       
       {/* Role Paths Section */}
-      <section id="paths" className="py-20 px-4">
+      <section id="paths" className="py-12 sm:py-16 md:py-20 px-4">
         <div className="container mx-auto max-w-6xl">
-          <h2 className="text-3xl font-bold text-center mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-3 sm:mb-4">
             Choose Your Path
           </h2>
-          <p className="text-muted-foreground text-center mb-12 max-w-2xl mx-auto">
+          <p className="text-sm sm:text-base text-muted-foreground text-center mb-8 sm:mb-12 max-w-2xl mx-auto px-4">
             Select a role path that matches your interests. Each path offers specialized 
             quests and skills to master.
           </p>
@@ -236,13 +273,13 @@ export default function HomePage() {
       </section>
       
       {/* How It Works Section */}
-      <section id="how-it-works" className="py-20 px-4 bg-secondary/30">
+      <section id="how-it-works" className="py-12 sm:py-16 md:py-20 px-4 bg-secondary/30">
         <div className="container mx-auto max-w-4xl">
-          <h2 className="text-3xl font-bold text-center mb-12">
+          <h2 className="text-2xl sm:text-3xl font-bold text-center mb-8 sm:mb-12">
             How It Works
           </h2>
           
-          <div className="space-y-8">
+          <div className="space-y-6 sm:space-y-8">
             {[
               {
                 step: 1,
@@ -270,13 +307,13 @@ export default function HomePage() {
                 description: 'Submit your work to earn XP, unlock badges, and climb the leaderboard.',
               },
             ].map((item, index) => (
-              <div key={index} className="flex gap-6 items-start">
-                <div className="shrink-0 h-12 w-12 rounded-full gradient-primary flex items-center justify-center text-white font-bold">
+              <div key={index} className="flex gap-4 sm:gap-6 items-start">
+                <div className="shrink-0 h-10 w-10 sm:h-12 sm:w-12 rounded-full gradient-primary flex items-center justify-center text-white font-bold text-sm sm:text-base">
                   {item.step}
                 </div>
                 <div>
-                  <h3 className="text-xl font-semibold mb-2">{item.title}</h3>
-                  <p className="text-muted-foreground">{item.description}</p>
+                  <h3 className="text-lg sm:text-xl font-semibold mb-1 sm:mb-2">{item.title}</h3>
+                  <p className="text-sm sm:text-base text-muted-foreground">{item.description}</p>
                 </div>
               </div>
             ))}
@@ -285,23 +322,23 @@ export default function HomePage() {
       </section>
       
       {/* CTA Section */}
-      <section className="py-20 px-4">
+      <section className="py-12 sm:py-16 md:py-20 px-4">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl font-bold mb-4">
+          <h2 className="text-2xl sm:text-3xl font-bold mb-3 sm:mb-4">
             Ready to Begin Your Quest?
           </h2>
-          <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
+          <p className="text-sm sm:text-base text-muted-foreground mb-6 sm:mb-8 max-w-xl mx-auto px-4">
             Join thousands of learners who are building their coding skills through gamified education.
           </p>
           
           <Link href="/auth/signup">
-            <Button size="lg" className="px-8">
+            <Button size="lg" className="px-6 sm:px-8">
               Start Learning Free
-              <ArrowRight className="ml-2 h-5 w-5" />
+              <ArrowRight className="ml-2 h-4 sm:h-5 w-4 sm:w-5" />
             </Button>
           </Link>
           
-          <div className="flex items-center justify-center gap-8 mt-8 text-sm text-muted-foreground">
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 sm:gap-8 mt-6 sm:mt-8 text-xs sm:text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-green-500" />
               Free to start
@@ -319,7 +356,7 @@ export default function HomePage() {
       </section>
       
       {/* Footer */}
-      <footer className="border-t py-12 px-4">
+      <footer className="border-t py-8 sm:py-12 px-4">
         <div className="container mx-auto max-w-6xl">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-2">
@@ -329,11 +366,11 @@ export default function HomePage() {
               <span className="font-bold">QuestBoard</span>
             </div>
             
-            <p className="text-sm text-muted-foreground">
+            <p className="text-xs sm:text-sm text-muted-foreground text-center">
               © 2024 QuestBoard. Learn to code through quests.
             </p>
             
-            <div className="flex items-center gap-4 text-sm text-muted-foreground">
+            <div className="flex items-center gap-4 text-xs sm:text-sm text-muted-foreground">
               <Link href="/privacy" className="hover:text-foreground">Privacy</Link>
               <Link href="/terms" className="hover:text-foreground">Terms</Link>
               <Link href="/contact" className="hover:text-foreground">Contact</Link>

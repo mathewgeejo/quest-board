@@ -20,11 +20,12 @@ export function DashboardLayout({ children, title, subtitle }: DashboardLayoutPr
       <div
         className={cn(
           'min-h-screen transition-all duration-300',
-          sidebarOpen ? 'lg:pl-64' : 'lg:pl-20'
+          'lg:pl-20',
+          sidebarOpen && 'lg:pl-64'
         )}
       >
         <Header title={title} subtitle={subtitle} />
-        <main className="p-6">{children}</main>
+        <main className="p-4 sm:p-6">{children}</main>
       </div>
     </div>
   )

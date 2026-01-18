@@ -41,31 +41,31 @@ export function Header({ title, subtitle }: HeaderProps) {
   }
   
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center gap-2 sm:gap-4 border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 px-4 sm:px-6">
       {/* Mobile menu button */}
       <Button
         variant="ghost"
         size="icon"
-        className="lg:hidden"
+        className="lg:hidden shrink-0"
         onClick={toggleSidebar}
       >
         <Menu className="h-5 w-5" />
       </Button>
       
       {/* Title */}
-      <div className="flex-1">
+      <div className="flex-1 min-w-0">
         {title && (
           <div>
-            <h1 className="text-xl font-bold">{title}</h1>
+            <h1 className="text-lg sm:text-xl font-bold truncate">{title}</h1>
             {subtitle && (
-              <p className="text-sm text-muted-foreground">{subtitle}</p>
+              <p className="text-xs sm:text-sm text-muted-foreground truncate hidden sm:block">{subtitle}</p>
             )}
           </div>
         )}
       </div>
       
       {/* Search */}
-      <div className="hidden md:flex relative w-64">
+      <div className="hidden md:flex relative w-48 lg:w-64">
         <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <Input
           type="search"
@@ -75,12 +75,13 @@ export function Header({ title, subtitle }: HeaderProps) {
       </div>
       
       {/* Actions */}
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1 sm:gap-2">
         {/* Theme toggle */}
         {mounted && (
           <Button
             variant="ghost"
             size="icon"
+            className="shrink-0"
             onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
           >
             {theme === 'dark' ? (
@@ -93,7 +94,7 @@ export function Header({ title, subtitle }: HeaderProps) {
         
         {/* Notifications */}
         <Link href="/notifications">
-          <Button variant="ghost" size="icon" className="relative">
+          <Button variant="ghost" size="icon" className="relative shrink-0">
             <Bell className="h-5 w-5" />
             {notificationCount > 0 && (
               <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-destructive text-xs text-white">
@@ -110,7 +111,7 @@ export function Header({ title, subtitle }: HeaderProps) {
               src={session.user.image}
               alt={session.user.name || 'User'}
               size="sm"
-              className="cursor-pointer hover:ring-2 hover:ring-primary transition-all"
+              className="cursor-pointer hover:ring-2 hover:ring-primary transition-all shrink-0"
             />
           </Link>
         )}

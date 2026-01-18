@@ -94,12 +94,23 @@ export function Sidebar() {
   }
   
   return (
-    <aside
-      className={cn(
-        'fixed left-0 top-0 z-40 h-screen bg-card border-r transition-all duration-300',
-        sidebarOpen ? 'w-64' : 'w-20'
+    <>
+      {/* Mobile overlay */}
+      {sidebarOpen && (
+        <div
+          className="fixed inset-0 z-40 bg-black/50 lg:hidden"
+          onClick={toggleSidebar}
+        />
       )}
-    >
+      
+      {/* Sidebar */}
+      <aside
+        className={cn(
+          'fixed left-0 top-0 z-50 h-screen bg-card border-r transition-transform duration-300',
+          'lg:translate-x-0',
+          sidebarOpen ? 'translate-x-0 w-64' : '-translate-x-full lg:translate-x-0 lg:w-20'
+        )}
+      >
       <div className="flex h-full flex-col">
         {/* Logo */}
         <div className="flex h-16 items-center justify-between px-4 border-b">
@@ -230,6 +241,7 @@ export function Sidebar() {
           )}
         </div>
       </div>
-    </aside>
+      </aside>
+    </>
   )
 }
