@@ -113,9 +113,9 @@ export function XPProgressCard({ totalXP, className }: XPProgressCardProps) {
         <div className="space-y-2">
           <div className="flex justify-between text-sm">
             <span className="text-muted-foreground">Progress to Level {level + 1}</span>
-            <span className="font-medium">{percent}%</span>
+            <span className="font-medium">{percentage}%</span>
           </div>
-          <Progress value={percent} variant="gradient" />
+          <Progress value={percentage} variant="gradient" />
           <p className="text-xs text-muted-foreground text-right">
             {current.toLocaleString()} / {required.toLocaleString()} XP
           </p>
