@@ -71,15 +71,31 @@ const authOptions: NextAuthOptions = {
   },
   callbacks: {
     async signIn({ user, account, profile }) {
-      // For OAuth providers (Google, GitHub), ensure user exists in database
+      // For OAuth providers (Google, GitHub), ensure user has a username
       if (account?.provider === 'google' || account?.provider === 'github') {
-        const existingUser = await prisma.user.findUnique({
-          where: { email: user.email! },
-        })
-        
-        // If user doesn't exist, the PrismaAdapter will create it
-        // We don't need to do anything special here
-        return true
+        try {
+          const existingUser = await prisma.user.findUnique({
+            where: { email: user.email! },
+            select: { id: true, username: true },
+          })
+          
+          // If user exists but has no username, generate one
+          if (existingUser && !existingUser.username) {
+            const emailPrefix = user.email!.split('@')[0]
+            const randomSuffix = Math.random().toString(36).substring(2, 6)
+            const generatedUsername = `${emailPrefix}_${randomSuffix}`
+            
+            await prisma.user.update({
+              where: { id: existingUser.id },
+              data: { username: generatedUsername },
+            })
+          }
+          
+          return true
+        } catch (error) {
+          console.error('Error in signIn callback:', error)
+          return true // Still allow sign in even if username generation fails
+        }
       }
       return true
     },
