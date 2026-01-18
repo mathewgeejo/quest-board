@@ -175,6 +175,9 @@ export default function SignUpPage() {
                 onChange={handleChange}
                 required
               />
+              <p className="text-xs text-muted-foreground">
+                Must be at least 8 characters with uppercase, lowercase, and a number
+              </p>
             </div>
             
             <div className="space-y-2">
