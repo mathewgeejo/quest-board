@@ -1,0 +1,572 @@
+// Prisma schema for QuestBoard with MongoDB
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// USER & AUTHENTICATION
+// ============================================
+
+model User {
+  id             String    @id @default(auto()) @map("_id") @db.ObjectId
+  email          String    @unique
+  emailVerified  DateTime?
+  name           String?
+  image          String?
+  passwordHash   String?
+  
+  // Profile
+  username       String?   @unique
+  bio            String?
+  avatar         String?
+  
+  // Game Stats
+  currentLevel   Int       @default(1)
+  totalXP        Int       @default(0)
+  streakCount    Int       @default(0)
+  longestStreak  Int       @default(0)
+  lastActiveAt   DateTime  @default(now())
+  streakFreezeAvailable Int @default(1)
+  
+  // Path & Progress
+  rolePath       RolePath?
+  onboardingComplete Boolean @default(false)
+  advancedMode   Boolean   @default(false)
+  
+  // Settings
+  settings       UserSettings?
+  
+  // Relations
+  accounts       Account[]
+  sessions       Session[]
+  questProgress  UserQuestProgress[]
+  badges         UserBadge[]
+  artifacts      Artifact[]
+  notifications  Notification[]
+  xpHistory      XPTransaction[]
+  
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+}
+
+model Account {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(auto()) @map("_id") @db.ObjectId
+  sessionToken String   @unique
+  userId       String   @db.ObjectId
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+type UserSettings {
+  theme              String   @default("dark")
+  emailNotifications Boolean  @default(true)
+  pushNotifications  Boolean  @default(true)
+  weeklyDigest       Boolean  @default(true)
+  showOnLeaderboard  Boolean  @default(false)
+  timezone           String   @default("UTC")
+}
+
+enum RolePath {
+  DEVOPS
+  BACKEND
+  FRONTEND
+  PRODUCT
+  SECURITY
+  FULLSTACK
+}
+
+// ============================================
+// QUEST SYSTEM
+// ============================================
+
+model QuestTree {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug            String   @unique
+  name            String
+  description     String
+  icon            String
+  color           String   @default("#0ea5e9")
+  
+  // Difficulty & Time
+  difficulty      Difficulty @default(NOVICE)
+  estimatedHours  Int        @default(10)
+  
+  // Role Relevance (which paths this tree is relevant for)
+  roleRelevance   RolePath[]
+  
+  // Prerequisites (other tree IDs that must be completed)
+  prerequisiteTreeIds String[] @db.ObjectId
+  
+  // Ordering
+  order           Int        @default(0)
+  layer           TreeLayer  @default(FOUNDATIONS)
+  
+  // Content
+  quests          Quest[]
+  
+  // Visibility
+  isPublished     Boolean    @default(true)
+  isFree          Boolean    @default(true)
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+enum TreeLayer {
+  FOUNDATIONS
+  TOOLS
+  FRONTEND
+  BACKEND
+  DATABASE
+  DEVOPS
+  SECURITY
+  MONITORING
+  CAPSTONE
+}
+
+enum Difficulty {
+  NOVICE
+  APPRENTICE
+  JOURNEYMAN
+  EXPERT
+  MASTER
+}
+
+model Quest {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug            String   @unique
+  
+  // Basic Info
+  name            String
+  description     String
+  longDescription String?
+  
+  // Tree Relationship
+  treeId          String   @db.ObjectId
+  tree            QuestTree @relation(fields: [treeId], references: [id])
+  
+  // Difficulty & Time
+  difficulty      Difficulty @default(NOVICE)
+  estimatedHours  Int        @default(2)
+  deadlineDays    Int        @default(7)
+  
+  // Rewards
+  xpReward        Int        @default(100)
+  badgeId         String?    @db.ObjectId
+  badge           Badge?     @relation(fields: [badgeId], references: [id])
+  
+  // Dependencies
+  prerequisiteQuestIds String[] @db.ObjectId
+  unlocksQuestIds      String[] @db.ObjectId
+  
+  // Content
+  tasks           QuestTask[]
+  resources       QuestResource[]
+  tools           QuestTool[]
+  
+  // Learning Objectives
+  learningObjectives String[]
+  
+  // Assessment
+  assessmentType  AssessmentType @default(ARTIFACT)
+  assessmentCriteria AssessmentCriteria?
+  
+  // Ordering
+  order           Int        @default(0)
+  
+  // Visibility
+  isPublished     Boolean    @default(true)
+  
+  // Relations
+  userProgress    UserQuestProgress[]
+  
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+}
+
+type QuestTask {
+  id          String
+  name        String
+  description String
+  order       Int
+  hints       String[]
+  verification String?
+}
+
+type QuestResource {
+  type        ResourceType
+  name        String
+  url         String
+  description String?
+  duration    Int?       // For videos, in minutes
+}
+
+enum ResourceType {
+  DOCUMENT
+  VIDEO
+  CHEATSHEET
+  STARTER_CODE
+  EXTERNAL_LINK
+  INTERACTIVE
+}
+
+type QuestTool {
+  name         String
+  version      String?
+  purpose      String?
+  installGuide String?
+  required     Boolean @default(true)
+}
+
+enum AssessmentType {
+  QUIZ
+  ARTIFACT
+  DEMONSTRATION
+  PEER_REVIEW
+  AUTO_CHECK
+}
+
+type AssessmentCriteria {
+  requirements    String[]
+  meetsExpectations String[]
+  exceedsExpectations String[]
+  exceptional     String[]
+}
+
+// ============================================
+// USER PROGRESS
+// ============================================
+
+model UserQuestProgress {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  
+  userId          String   @db.ObjectId
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  questId         String   @db.ObjectId
+  quest           Quest    @relation(fields: [questId], references: [id])
+  
+  // Status
+  status          QuestStatus @default(NOT_STARTED)
+  
+  // Progress
+  tasksCompleted  String[]    // Array of task IDs
+  progressPercent Int         @default(0)
+  
+  // Timing
+  startedAt       DateTime?
+  completedAt     DateTime?
+  deadlineAt      DateTime?
+  
+  // Attempts
+  attemptCount    Int         @default(0)
+  currentAttempt  Int         @default(1)
+  
+  // Results
+  xpEarned        Int         @default(0)
+  evaluation      QuestEvaluation?
+  
+  // Artifacts
+  artifactIds     String[]    @db.ObjectId
+  
+  // Notes
+  notes           String?
+  
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+  
+  @@unique([userId, questId])
+}
+
+enum QuestStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  COMPLETED
+  EXPIRED
+  ABANDONED
+}
+
+enum QuestEvaluation {
+  MEETS_EXPECTATIONS
+  EXCEEDS_EXPECTATIONS
+  EXCEPTIONAL
+}
+
+// ============================================
+// BADGES & ACHIEVEMENTS
+// ============================================
+
+model Badge {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  slug        String   @unique
+  
+  name        String
+  description String
+  icon        String
+  color       String   @default("#fbbf24")
+  
+  // Type
+  type        BadgeType
+  rarity      BadgeRarity @default(COMMON)
+  
+  // Criteria (JSON for flexible conditions)
+  criteria    BadgeCriteria
+  
+  // Relations
+  quests      Quest[]
+  userBadges  UserBadge[]
+  
+  // Hidden badges for surprise/delight
+  isHidden    Boolean  @default(false)
+  
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum BadgeType {
+  PROGRESS      // First Steps, etc.
+  SKILL         // API Architect, etc.
+  BEHAVIOR      // Night Owl, etc.
+  STREAK        // Week Warrior, etc.
+  SOCIAL        // Helper, etc.
+  SPECIAL       // Limited time, etc.
+}
+
+enum BadgeRarity {
+  COMMON
+  UNCOMMON
+  RARE
+  EPIC
+  LEGENDARY
+}
+
+type BadgeCriteria {
+  type          String    // quest_complete, streak, xp_earned, etc.
+  target        Int?      // Target value
+  questIds      String[]  // Specific quests
+  treeIds       String[]  // Specific trees
+  conditions    String?   // JSON string for complex conditions
+}
+
+model UserBadge {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  
+  userId    String   @db.ObjectId
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  badgeId   String   @db.ObjectId
+  badge     Badge    @relation(fields: [badgeId], references: [id])
+  
+  earnedAt  DateTime @default(now())
+  
+  // Context of how it was earned
+  context   String?
+  
+  @@unique([userId, badgeId])
+}
+
+// ============================================
+// ARTIFACTS & PORTFOLIO
+// ============================================
+
+model Artifact {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  questId     String?  @db.ObjectId
+  
+  // Basic Info
+  title       String
+  description String?
+  type        ArtifactType
+  
+  // Links
+  url         String
+  repoUrl     String?
+  liveUrl     String?
+  
+  // Metadata
+  metadata    ArtifactMetadata?
+  
+  // Visibility
+  isPublic    Boolean  @default(true)
+  isFeatured  Boolean  @default(false)
+  
+  // Verification
+  isVerified  Boolean  @default(false)
+  verifiedAt  DateTime?
+  
+  submittedAt DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+enum ArtifactType {
+  REPOSITORY
+  DEPLOYMENT
+  DOCUMENT
+  VIDEO
+  PRESENTATION
+  CONFIGURATION
+  OTHER
+}
+
+type ArtifactMetadata {
+  language    String?
+  framework   String?
+  tools       String[]
+  screenshots String[]
+  stats       String?   // JSON for flexible stats
+}
+
+// ============================================
+// XP & TRANSACTIONS
+// ============================================
+
+model XPTransaction {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  amount      Int
+  type        XPTransactionType
+  
+  // Reference
+  referenceId String?  @db.ObjectId
+  referenceType String?
+  
+  // Details
+  description String
+  
+  // Balance tracking
+  balanceBefore Int
+  balanceAfter  Int
+  
+  createdAt   DateTime @default(now())
+}
+
+enum XPTransactionType {
+  QUEST_COMPLETE
+  QUEST_EARLY_BONUS
+  STREAK_BONUS
+  FIRST_TRY_BONUS
+  HELPING_OTHERS
+  QUALITY_ARTIFACT
+  BADGE_EARNED
+  HINT_PURCHASE
+  QUEST_EXPIRED
+  LEVEL_UP_BONUS
+  DAILY_LOGIN
+  ACHIEVEMENT
+}
+
+// ============================================
+// NOTIFICATIONS
+// ============================================
+
+model Notification {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  
+  userId      String   @db.ObjectId
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  type        NotificationType
+  title       String
+  message     String
+  
+  // Link
+  actionUrl   String?
+  actionText  String?
+  
+  // Status
+  isRead      Boolean  @default(false)
+  readAt      DateTime?
+  
+  createdAt   DateTime @default(now())
+}
+
+enum NotificationType {
+  QUEST_REMINDER
+  QUEST_UNLOCKED
+  BADGE_EARNED
+  LEVEL_UP
+  STREAK_WARNING
+  STREAK_LOST
+  STREAK_MILESTONE
+  SYSTEM
+  SOCIAL
+}
+
+// ============================================
+// LEADERBOARD & SOCIAL (Optional)
+// ============================================
+
+model LeaderboardEntry {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  
+  userId      String   @db.ObjectId
+  
+  // Cached user info for performance
+  userName    String
+  userAvatar  String?
+  userLevel   Int
+  
+  // Stats
+  totalXP     Int
+  questsCompleted Int
+  currentStreak Int
+  
+  // Period
+  period      LeaderboardPeriod
+  periodStart DateTime
+  
+  // Ranking
+  rank        Int
+  
+  updatedAt   DateTime @updatedAt
+  
+  @@unique([userId, period, periodStart])
+}
+
+enum LeaderboardPeriod {
+  DAILY
+  WEEKLY
+  MONTHLY
+  ALL_TIME
+}

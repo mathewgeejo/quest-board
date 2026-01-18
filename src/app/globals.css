@@ -1,0 +1,211 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 220 20% 97%;
+    --foreground: 220 20% 10%;
+    --card: 0 0% 100%;
+    --card-foreground: 220 20% 10%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 20% 10%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 220 20% 20%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 220 10% 40%;
+    --accent: 172 66% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
+    --ring: 262 83% 58%;
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 220 20% 10%;
+    --foreground: 220 10% 98%;
+    --card: 220 20% 13%;
+    --card-foreground: 220 10% 98%;
+    --popover: 220 20% 13%;
+    --popover-foreground: 220 10% 98%;
+    --primary: 262 83% 58%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 220 20% 18%;
+    --secondary-foreground: 220 10% 90%;
+    --muted: 220 20% 18%;
+    --muted-foreground: 220 10% 60%;
+    --accent: 172 66% 50%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 220 20% 20%;
+    --input: 220 20% 20%;
+    --ring: 262 83% 58%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+}
+
+@layer components {
+  .gradient-primary {
+    @apply bg-gradient-to-r from-primary to-accent;
+  }
+  
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-200 hover:shadow-lg hover:-translate-y-1;
+  }
+  
+  .quest-card {
+    @apply relative overflow-hidden rounded-xl border bg-card p-6 card-hover;
+  }
+  
+  .quest-card::before {
+    content: '';
+    @apply absolute top-0 left-0 w-1 h-full;
+  }
+  
+  .quest-card[data-difficulty="TUTORIAL"]::before {
+    @apply bg-green-500;
+  }
+  
+  .quest-card[data-difficulty="EASY"]::before {
+    @apply bg-emerald-500;
+  }
+  
+  .quest-card[data-difficulty="MEDIUM"]::before {
+    @apply bg-yellow-500;
+  }
+  
+  .quest-card[data-difficulty="HARD"]::before {
+    @apply bg-orange-500;
+  }
+  
+  .quest-card[data-difficulty="EPIC"]::before {
+    @apply bg-red-500;
+  }
+  
+  .quest-card[data-difficulty="LEGENDARY"]::before {
+    @apply bg-purple-500;
+  }
+  
+  .badge-glow {
+    @apply shadow-lg;
+    box-shadow: 0 0 20px currentColor;
+  }
+  
+  .xp-bar {
+    @apply h-3 rounded-full bg-secondary overflow-hidden;
+  }
+  
+  .xp-bar-fill {
+    @apply h-full rounded-full gradient-primary transition-all duration-500;
+  }
+  
+  .streak-flame {
+    animation: flame 0.5s ease-in-out infinite alternate;
+  }
+  
+  @keyframes flame {
+    from {
+      transform: scale(1) rotate(-2deg);
+    }
+    to {
+      transform: scale(1.1) rotate(2deg);
+    }
+  }
+  
+  .level-up-animation {
+    animation: levelUp 0.6s ease-out;
+  }
+  
+  @keyframes levelUp {
+    0% {
+      transform: scale(0.5);
+      opacity: 0;
+    }
+    50% {
+      transform: scale(1.2);
+    }
+    100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+  
+  .pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulseGlow {
+    0%, 100% {
+      box-shadow: 0 0 5px currentColor;
+    }
+    50% {
+      box-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
+    }
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-secondary rounded-full;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-muted-foreground/30 rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/50;
+}
+
+/* Quest tree connections */
+.quest-tree-line {
+  @apply absolute bg-border;
+}
+
+.quest-tree-line.completed {
+  @apply bg-primary;
+}
+
+/* Tooltip styles */
+.tooltip {
+  @apply absolute z-50 px-3 py-2 text-sm bg-popover text-popover-foreground rounded-lg shadow-lg;
+  @apply opacity-0 invisible transition-all duration-200;
+}
+
+.tooltip.show {
+  @apply opacity-100 visible;
+}
+
+/* Loading skeleton */
+.skeleton {
+  @apply animate-pulse bg-muted rounded;
+}
+
+/* Focus styles */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background;
+}
