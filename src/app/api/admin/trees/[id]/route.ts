@@ -35,13 +35,11 @@ export async function GET(
             id: true,
             name: true,
             difficulty: true,
-            layer: true,
-            order: true,
+            xpReward: true,
           },
-          orderBy: [
-            { layer: 'asc' },
-            { order: 'asc' },
-          ],
+          orderBy: {
+            createdAt: 'asc',
+          },
         },
       },
     })
