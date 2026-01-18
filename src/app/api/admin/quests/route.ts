@@ -1,29 +1,9 @@
 import { NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-
-// Check if user is admin
-async function checkAdmin(userId: string) {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { isAdmin: true },
-  })
-  return user?.isAdmin || false
-}
 
 // GET - List all quests
 export async function GET() {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    
-    if (!(await checkAdmin(session.user.id))) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-    
     const quests = await prisma.quest.findMany({
       orderBy: { createdAt: 'desc' },
       include: {
@@ -43,15 +23,6 @@ export async function GET() {
 // POST - Create new quest
 export async function POST(request: Request) {
   try {
-    const session = await getServerSession(authOptions)
-    if (!session?.user?.id) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
-    
-    if (!(await checkAdmin(session.user.id))) {
-      return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-    }
-    
     const body = await request.json()
     const {
       name,
