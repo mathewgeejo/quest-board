@@ -115,44 +115,9 @@ const config: Config = {
           900: '#0f172a',
           950: '#020617',
         },
-        // Fantasy RPG Theme Colors
-        dungeon: {
-          950: 'hsl(260 30% 3%)',
-          900: 'hsl(260 25% 6%)',
-          800: 'hsl(260 20% 10%)',
-          700: 'hsl(260 15% 15%)',
-          600: 'hsl(260 12% 25%)',
-          500: 'hsl(260 10% 35%)',
-        },
-        arcane: {
-          dark: 'hsl(270 60% 25%)',
-          DEFAULT: 'hsl(270 70% 45%)',
-          purple: 'hsl(270 70% 45%)',
-          light: 'hsl(270 80% 70%)',
-          glow: 'hsl(270 100% 80%)',
-        },
-        gold: {
-          dark: 'hsl(38 80% 35%)',
-          DEFAULT: 'hsl(43 96% 56%)',
-          light: 'hsl(45 100% 70%)',
-        },
-        fire: {
-          dark: 'hsl(15 90% 35%)',
-          DEFAULT: 'hsl(25 95% 53%)',
-          light: 'hsl(35 100% 65%)',
-        },
-        rarity: {
-          common: 'hsl(220 10% 60%)',
-          uncommon: 'hsl(142 70% 45%)',
-          rare: 'hsl(217 91% 60%)',
-          epic: 'hsl(270 70% 60%)',
-          legendary: 'hsl(43 96% 56%)',
-        },
       },
       fontFamily: {
-        sans: ['var(--font-inter)', 'Inter', 'system-ui', 'sans-serif'],
-        fantasy: ['var(--font-cinzel)', 'Cinzel', 'serif'],
-        scroll: ['var(--font-crimson)', 'Crimson Text', 'serif'],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
         display: ['Cal Sans', 'Inter', 'system-ui', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
       },
@@ -161,11 +126,6 @@ const config: Config = {
         'bounce-slow': 'bounce 2s infinite',
         'glow': 'glow 2s ease-in-out infinite alternate',
         'float': 'float 3s ease-in-out infinite',
-        'border-glow': 'borderGlow 3s ease-in-out infinite',
-        'torch-flicker': 'torchFlicker 0.3s ease-in-out infinite',
-        'rune-pulse': 'runePulse 2s ease-in-out infinite',
-        'portal-spin': 'portalSpin 8s linear infinite',
-        'xp-shimmer': 'xpShimmer 2s infinite',
       },
       keyframes: {
         glow: {
@@ -175,28 +135,6 @@ const config: Config = {
         float: {
           '0%, 100%': { transform: 'translateY(0px)' },
           '50%': { transform: 'translateY(-10px)' },
-        },
-        borderGlow: {
-          '0%, 100%': { boxShadow: '0 0 5px hsl(270 70% 45% / 0.3), 0 0 10px hsl(270 70% 45% / 0.2)' },
-          '50%': { boxShadow: '0 0 10px hsl(270 70% 45% / 0.5), 0 0 20px hsl(270 70% 45% / 0.3)' },
-        },
-        torchFlicker: {
-          '0%, 100%': { opacity: '1', transform: 'scale(1)' },
-          '25%': { opacity: '0.9', transform: 'scale(0.98)' },
-          '50%': { opacity: '1', transform: 'scale(1.02)' },
-          '75%': { opacity: '0.95', transform: 'scale(0.99)' },
-        },
-        runePulse: {
-          '0%, 100%': { filter: 'drop-shadow(0 0 3px hsl(270 70% 45% / 0.6))' },
-          '50%': { filter: 'drop-shadow(0 0 8px hsl(270 70% 45% / 0.9))' },
-        },
-        portalSpin: {
-          from: { transform: 'rotate(0deg)' },
-          to: { transform: 'rotate(360deg)' },
-        },
-        xpShimmer: {
-          '0%': { left: '-100%' },
-          '100%': { left: '100%' },
         },
       },
       backgroundImage: {
