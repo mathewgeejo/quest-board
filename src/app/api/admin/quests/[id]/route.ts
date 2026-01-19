@@ -45,6 +45,25 @@ export async function PUT(
       resources,
     } = body
     
+    // Transform tasks to match Prisma schema
+    const transformedTasks = (tasks || []).map((task: any, index: number) => ({
+      id: task.id || `task-${Date.now()}-${index}`,
+      name: task.title || '',
+      description: task.description || '',
+      order: task.order || index + 1,
+      hints: [],
+      verification: null,
+    }))
+    
+    // Transform resources to match Prisma schema
+    const transformedResources = (resources || []).map((resource: any) => ({
+      type: 'EXTERNAL_LINK' as const,
+      name: resource,
+      url: resource,
+      description: null,
+      duration: null,
+    }))
+    
     const quest = await prisma.quest.update({
       where: { id: params.id },
       data: {
@@ -54,8 +73,8 @@ export async function PUT(
         xpReward: xpReward || 100,
         estimatedHours: estimatedHours || 2,
         treeId,
-        tasks: tasks || [],
-        resources: resources || [],
+        tasks: transformedTasks,
+        resources: transformedResources,
       },
     })
     

@@ -48,6 +48,25 @@ export async function POST(request: Request) {
     const baseSlug = name.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '')
     const slug = `${baseSlug}-${Date.now()}`
     
+    // Transform tasks to match Prisma schema
+    const transformedTasks = (tasks || []).map((task: any, index: number) => ({
+      id: `task-${Date.now()}-${index}`,
+      name: task.title || '',
+      description: task.description || '',
+      order: task.order || index + 1,
+      hints: [],
+      verification: null,
+    }))
+    
+    // Transform resources to match Prisma schema  
+    const transformedResources = (resources || []).map((resource: any) => ({
+      type: 'EXTERNAL_LINK' as const,
+      name: resource,
+      url: resource,
+      description: null,
+      duration: null,
+    }))
+    
     const quest = await prisma.quest.create({
       data: {
         slug,
@@ -57,8 +76,8 @@ export async function POST(request: Request) {
         xpReward: xpReward || 100,
         estimatedHours: estimatedHours || 2,
         treeId,
-        tasks: tasks || [],
-        resources: resources || [],
+        tasks: transformedTasks,
+        resources: transformedResources,
         learningObjectives: [],
       },
     })
