@@ -3,30 +3,33 @@
 import { SessionProvider } from 'next-auth/react'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'react-hot-toast'
+import { ToastProvider } from './ui/fantasy-toast'
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <SessionProvider>
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-        {children}
+      <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+        <ToastProvider>
+          {children}
+        </ToastProvider>
         <Toaster
           position="bottom-right"
           toastOptions={{
             duration: 4000,
             style: {
-              background: 'hsl(var(--card))',
-              color: 'hsl(var(--card-foreground))',
-              border: '1px solid hsl(var(--border))',
+              background: 'hsl(260 25% 8%)',
+              color: 'hsl(45 20% 90%)',
+              border: '1px solid hsl(260 20% 18%)',
             },
             success: {
               iconTheme: {
-                primary: 'hsl(var(--accent))',
+                primary: 'hsl(270 70% 45%)',
                 secondary: 'white',
               },
             },
             error: {
               iconTheme: {
-                primary: 'hsl(var(--destructive))',
+                primary: 'hsl(0 72% 51%)',
                 secondary: 'white',
               },
             },

@@ -2,50 +2,71 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Import Google Fonts for Fantasy Theme */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700;800;900&family=Crimson+Text:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @layer base {
   :root {
-    --background: 220 20% 97%;
-    --foreground: 220 20% 10%;
-    --card: 0 0% 100%;
-    --card-foreground: 220 20% 10%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 20% 10%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 220 20% 20%;
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 10% 40%;
-    --accent: 172 66% 50%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 84% 60%;
+    /* Fantasy Color Palette - Dark Dungeon Theme */
+    --background: 260 30% 5%;
+    --foreground: 45 20% 90%;
+    
+    /* Dungeon stone backgrounds */
+    --dungeon-950: 260 30% 3%;
+    --dungeon-900: 260 25% 6%;
+    --dungeon-800: 260 20% 10%;
+    --dungeon-700: 260 15% 15%;
+    --dungeon-600: 260 12% 25%;
+    --dungeon-500: 260 10% 35%;
+    
+    /* Arcane purple (primary) */
+    --arcane-dark: 270 60% 25%;
+    --arcane-purple: 270 70% 45%;
+    --arcane-light: 270 80% 70%;
+    --arcane-glow: 270 100% 80%;
+    
+    /* Gold accents */
+    --gold-dark: 38 80% 35%;
+    --gold: 43 96% 56%;
+    --gold-light: 45 100% 70%;
+    
+    /* Torch fire */
+    --fire-dark: 15 90% 35%;
+    --fire: 25 95% 53%;
+    --fire-light: 35 100% 65%;
+    
+    /* Status colors */
+    --success: 142 70% 45%;
+    --warning: 38 92% 50%;
+    --error: 0 72% 51%;
+    --info: 217 91% 60%;
+    
+    /* Rarity colors */
+    --rarity-common: 220 10% 60%;
+    --rarity-uncommon: 142 70% 45%;
+    --rarity-rare: 217 91% 60%;
+    --rarity-epic: 270 70% 60%;
+    --rarity-legendary: 43 96% 56%;
+    
+    /* Card and UI */
+    --card: 260 25% 8%;
+    --card-foreground: 45 20% 90%;
+    --popover: 260 25% 8%;
+    --popover-foreground: 45 20% 90%;
+    --primary: 270 70% 45%;
+    --primary-foreground: 45 20% 95%;
+    --secondary: 260 20% 15%;
+    --secondary-foreground: 45 20% 85%;
+    --muted: 260 20% 12%;
+    --muted-foreground: 45 10% 55%;
+    --accent: 43 96% 56%;
+    --accent-foreground: 260 30% 5%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 100%;
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 262 83% 58%;
-    --radius: 0.75rem;
-  }
-
-  .dark {
-    --background: 220 20% 10%;
-    --foreground: 220 10% 98%;
-    --card: 220 20% 13%;
-    --card-foreground: 220 10% 98%;
-    --popover: 220 20% 13%;
-    --popover-foreground: 220 10% 98%;
-    --primary: 262 83% 58%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 220 20% 18%;
-    --secondary-foreground: 220 10% 90%;
-    --muted: 220 20% 18%;
-    --muted-foreground: 220 10% 60%;
-    --accent: 172 66% 50%;
-    --accent-foreground: 0 0% 100%;
-    --destructive: 0 62% 50%;
-    --destructive-foreground: 0 0% 100%;
-    --border: 220 20% 20%;
-    --input: 220 20% 20%;
-    --ring: 262 83% 58%;
+    --border: 260 20% 18%;
+    --input: 260 20% 15%;
+    --ring: 270 70% 45%;
+    --radius: 0.5rem;
   }
 }
 
@@ -53,13 +74,165 @@
   * {
     border-color: hsl(var(--border));
   }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
   body {
-    @apply bg-background text-foreground;
+    @apply text-stone-200;
+    font-family: 'Inter', system-ui, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
+    background: linear-gradient(135deg, hsl(260 30% 3%) 0%, hsl(270 25% 5%) 50%, hsl(260 30% 3%) 100%);
+    min-height: 100vh;
+  }
+  
+  /* Fantasy typography */
+  .font-fantasy {
+    font-family: 'Cinzel', serif;
+    letter-spacing: 0.02em;
+  }
+  
+  .font-scroll {
+    font-family: 'Crimson Text', serif;
   }
 }
 
+@layer utilities {
+  /* Dungeon colors */
+  .bg-dungeon-950 { background-color: hsl(260 30% 3%); }
+  .bg-dungeon-900 { background-color: hsl(260 25% 6%); }
+  .bg-dungeon-800 { background-color: hsl(260 20% 10%); }
+  .bg-dungeon-700 { background-color: hsl(260 15% 15%); }
+  .bg-dungeon-600 { background-color: hsl(260 12% 25%); }
+  .bg-dungeon-500 { background-color: hsl(260 10% 35%); }
+  
+  .text-dungeon-500 { color: hsl(260 10% 35%); }
+  .text-dungeon-600 { color: hsl(260 12% 25%); }
+  .text-dungeon-700 { color: hsl(260 15% 15%); }
+  
+  .border-dungeon-700 { border-color: hsl(260 15% 15%); }
+  .border-dungeon-600 { border-color: hsl(260 12% 25%); }
+  
+  /* Arcane colors */
+  .bg-arcane-dark { background-color: hsl(270 60% 25%); }
+  .bg-arcane-purple { background-color: hsl(270 70% 45%); }
+  .bg-arcane-light { background-color: hsl(270 80% 70%); }
+  
+  .text-arcane-dark { color: hsl(270 60% 25%); }
+  .text-arcane-purple { color: hsl(270 70% 45%); }
+  .text-arcane-light { color: hsl(270 80% 70%); }
+  .text-arcane-glow { color: hsl(270 100% 80%); }
+  
+  .border-arcane-purple { border-color: hsl(270 70% 45%); }
+  
+  /* Gold colors */
+  .bg-gold-dark { background-color: hsl(38 80% 35%); }
+  .bg-gold { background-color: hsl(43 96% 56%); }
+  .bg-gold-light { background-color: hsl(45 100% 70%); }
+  
+  .text-gold-dark { color: hsl(38 80% 35%); }
+  .text-gold { color: hsl(43 96% 56%); }
+  .text-gold-light { color: hsl(45 100% 70%); }
+  
+  .border-gold { border-color: hsl(43 96% 56%); }
+  
+  /* Fire colors */
+  .bg-fire { background-color: hsl(25 95% 53%); }
+  .text-fire { color: hsl(25 95% 53%); }
+}
+
 @layer components {
+  /* Arcane glow effects */
+  .glow-arcane {
+    box-shadow: 0 0 20px hsl(270 70% 45% / 0.4),
+                0 0 40px hsl(270 70% 45% / 0.2),
+                inset 0 0 20px hsl(270 70% 45% / 0.1);
+  }
+  
+  .glow-gold {
+    box-shadow: 0 0 20px hsl(43 96% 56% / 0.4),
+                0 0 40px hsl(43 96% 56% / 0.2),
+                inset 0 0 20px hsl(43 96% 56% / 0.1);
+  }
+  
+  .glow-fire {
+    box-shadow: 0 0 15px hsl(25 95% 53% / 0.5),
+                0 0 30px hsl(25 95% 53% / 0.3);
+  }
+  
+  /* Gradient text */
+  .gradient-text-arcane {
+    background: linear-gradient(135deg, hsl(270 80% 70%) 0%, hsl(270 70% 45%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .gradient-text-gold {
+    background: linear-gradient(135deg, hsl(45 100% 70%) 0%, hsl(43 96% 56%) 50%, hsl(38 80% 35%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  /* Fantasy card styles */
+  .fantasy-card {
+    @apply relative rounded-lg overflow-hidden;
+    background: linear-gradient(135deg, hsl(260 25% 8%) 0%, hsl(260 25% 10%) 100%);
+    border: 1px solid hsl(260 20% 18%);
+  }
+  
+  .fantasy-card::before {
+    content: '';
+    @apply absolute inset-0 pointer-events-none;
+    background: linear-gradient(135deg, hsl(270 70% 45% / 0.05) 0%, transparent 50%);
+  }
+  
+  .fantasy-card-gold {
+    @apply fantasy-card;
+    border-color: hsl(43 96% 56% / 0.3);
+  }
+  
+  .fantasy-card-gold::before {
+    background: linear-gradient(135deg, hsl(43 96% 56% / 0.08) 0%, transparent 50%);
+  }
+  
+  /* Stone panel */
+  .stone-panel {
+    background: linear-gradient(180deg, hsl(260 20% 12%) 0%, hsl(260 25% 8%) 100%);
+    border: 1px solid hsl(260 15% 20%);
+    box-shadow: inset 0 2px 4px hsl(260 30% 3% / 0.5),
+                inset 0 -1px 2px hsl(260 10% 25% / 0.2);
+  }
+  
+  /* XP Bar Fantasy */
+  .xp-bar-fantasy {
+    @apply relative h-4 rounded-full overflow-hidden;
+    background: linear-gradient(180deg, hsl(260 25% 8%) 0%, hsl(260 30% 5%) 100%);
+    border: 1px solid hsl(260 20% 18%);
+    box-shadow: inset 0 2px 4px hsl(260 30% 3% / 0.5);
+  }
+  
+  .xp-bar-fill-fantasy {
+    @apply h-full rounded-full;
+    background: linear-gradient(90deg, hsl(270 60% 35%) 0%, hsl(270 70% 45%) 50%, hsl(270 80% 55%) 100%);
+    box-shadow: 0 0 10px hsl(270 70% 45% / 0.5);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .xp-bar-fill-fantasy::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, hsl(270 100% 80% / 0.4), transparent);
+    animation: xpShimmer 2s infinite;
+  }
+  
   .gradient-primary {
     @apply bg-gradient-to-r from-primary to-accent;
   }
@@ -81,28 +254,30 @@
     @apply absolute top-0 left-0 w-1 h-full;
   }
   
-  .quest-card[data-difficulty="TUTORIAL"]::before {
+  .quest-card[data-difficulty="TUTORIAL"]::before,
+  .quest-card[data-difficulty="NOVICE"]::before {
+    @apply bg-gray-400;
+  }
+  
+  .quest-card[data-difficulty="EASY"]::before,
+  .quest-card[data-difficulty="APPRENTICE"]::before {
     @apply bg-green-500;
   }
   
-  .quest-card[data-difficulty="EASY"]::before {
-    @apply bg-emerald-500;
+  .quest-card[data-difficulty="MEDIUM"]::before,
+  .quest-card[data-difficulty="JOURNEYMAN"]::before {
+    @apply bg-blue-500;
   }
   
-  .quest-card[data-difficulty="MEDIUM"]::before {
-    @apply bg-yellow-500;
-  }
-  
-  .quest-card[data-difficulty="HARD"]::before {
-    @apply bg-orange-500;
-  }
-  
-  .quest-card[data-difficulty="EPIC"]::before {
-    @apply bg-red-500;
-  }
-  
-  .quest-card[data-difficulty="LEGENDARY"]::before {
+  .quest-card[data-difficulty="HARD"]::before,
+  .quest-card[data-difficulty="EXPERT"]::before {
     @apply bg-purple-500;
+  }
+  
+  .quest-card[data-difficulty="EPIC"]::before,
+  .quest-card[data-difficulty="LEGENDARY"]::before,
+  .quest-card[data-difficulty="MASTER"]::before {
+    @apply bg-amber-500;
   }
   
   .badge-glow {
@@ -118,8 +293,47 @@
     @apply h-full rounded-full gradient-primary transition-all duration-500;
   }
   
-  .streak-flame {
-    animation: flame 0.5s ease-in-out infinite alternate;
+  /* Animations */
+  @keyframes xpShimmer {
+    0% { left: -100%; }
+    100% { left: 100%; }
+  }
+  
+  @keyframes borderGlow {
+    0%, 100% { 
+      box-shadow: 0 0 5px hsl(270 70% 45% / 0.3),
+                  0 0 10px hsl(270 70% 45% / 0.2);
+    }
+    50% { 
+      box-shadow: 0 0 10px hsl(270 70% 45% / 0.5),
+                  0 0 20px hsl(270 70% 45% / 0.3);
+    }
+  }
+  
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+  }
+  
+  @keyframes torchFlicker {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    25% { opacity: 0.9; transform: scale(0.98); }
+    50% { opacity: 1; transform: scale(1.02); }
+    75% { opacity: 0.95; transform: scale(0.99); }
+  }
+  
+  @keyframes runePulse {
+    0%, 100% { 
+      filter: drop-shadow(0 0 3px hsl(270 70% 45% / 0.6));
+    }
+    50% { 
+      filter: drop-shadow(0 0 8px hsl(270 70% 45% / 0.9));
+    }
+  }
+  
+  @keyframes portalSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
   }
   
   @keyframes flame {
@@ -129,10 +343,6 @@
     to {
       transform: scale(1.1) rotate(2deg);
     }
-  }
-  
-  .level-up-animation {
-    animation: levelUp 0.6s ease-out;
   }
   
   @keyframes levelUp {
@@ -149,10 +359,6 @@
     }
   }
   
-  .pulse-glow {
-    animation: pulseGlow 2s ease-in-out infinite;
-  }
-  
   @keyframes pulseGlow {
     0%, 100% {
       box-shadow: 0 0 5px currentColor;
@@ -160,6 +366,75 @@
     50% {
       box-shadow: 0 0 20px currentColor, 0 0 30px currentColor;
     }
+  }
+  
+  .animate-border-glow {
+    animation: borderGlow 3s ease-in-out infinite;
+  }
+  
+  .animate-float {
+    animation: float 3s ease-in-out infinite;
+  }
+  
+  .animate-torch-flicker {
+    animation: torchFlicker 0.3s ease-in-out infinite;
+  }
+  
+  .animate-rune-pulse {
+    animation: runePulse 2s ease-in-out infinite;
+  }
+  
+  .animate-portal-spin {
+    animation: portalSpin 8s linear infinite;
+  }
+  
+  .streak-flame {
+    animation: flame 0.5s ease-in-out infinite alternate;
+  }
+  
+  .level-up-animation {
+    animation: levelUp 0.6s ease-out;
+  }
+  
+  .pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+  
+  /* Reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .animate-border-glow,
+    .animate-float,
+    .animate-torch-flicker,
+    .animate-rune-pulse,
+    .animate-portal-spin,
+    .streak-flame,
+    .level-up-animation,
+    .pulse-glow,
+    .xp-bar-fill-fantasy::after {
+      animation: none;
+    }
+  }
+  
+  /* Navigation */
+  .nav-link {
+    @apply relative px-4 py-2 rounded-lg transition-all duration-200;
+    @apply text-stone-400 hover:text-stone-200;
+  }
+  
+  .nav-link::before {
+    content: '';
+    @apply absolute inset-0 rounded-lg opacity-0 transition-opacity;
+    background: linear-gradient(135deg, hsl(270 70% 45% / 0.1) 0%, transparent 100%);
+  }
+  
+  .nav-link:hover::before {
+    @apply opacity-100;
+  }
+  
+  .nav-link-active {
+    @apply text-stone-100;
+    background: linear-gradient(135deg, hsl(270 70% 45% / 0.2) 0%, hsl(260 25% 10%) 100%);
+    border: 1px solid hsl(270 70% 45% / 0.3);
   }
 }
 
@@ -170,15 +445,21 @@
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-secondary rounded-full;
+  background: hsl(260 25% 8%);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-muted-foreground/30 rounded-full;
+  background: linear-gradient(180deg, hsl(270 60% 35%) 0%, hsl(270 50% 25%) 100%);
+  border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-muted-foreground/50;
+  background: linear-gradient(180deg, hsl(270 70% 45%) 0%, hsl(270 60% 35%) 100%);
+}
+
+.fantasy-scrollbar::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, hsl(38 60% 40%) 0%, hsl(38 50% 30%) 100%);
 }
 
 /* Quest tree connections */
